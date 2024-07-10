@@ -1,79 +1,27 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
-import Api from "../Utills/Api";
+import React, { useEffect, useState, useCallback, useMemo, useContext } from "react";
+import Api, { BASE_URL } from "../Utills/Api";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { MyContext } from "../Utills/MyContext";
 
 function Popular({ refreshCart }) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [getProduct, setGetProduct] = useState([]);
-  const [cartItems, setCartItems] = useState({});
+  const [popularProds, setPopularProds] = useState([]);
   const [stock, setStock] = useState({});
+  const isMobile = window.innerWidth <= 768;
+  const itemsPerPage = isMobile ? 1 : 3;
   const uid = localStorage.getItem("user_id");
-  const navigate = useNavigate();
+  const access_token = localStorage.getItem('access_token');
+  const { cartGlobalItems, setCartGlobalItems} = useContext(MyContext);
+  const [cartError, setCartError] = useState(null);
 
-  useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem("cart")) || {};
-    setCartItems(cart);
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      await Promise.all([getMostPopular(), getCartItems(), getStock()]);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
 
   const getMostPopular = async () => {
     try {
       const response = uid
         ? await Api.get("api/most-popular/")
-        : await axios.get("https://app.frozenwala.com/base/api/auth/most-popular/");
-        console.log("skdufye ysfuid nu9odsgurdi fhfu", response.data);
-      setGetProduct(response.data);
+        : await axios.get(`${BASE_URL}api/auth/most-popular/`);
+      setPopularProds(response.data);
     } catch (error) {
-      console.error("Error fetching most popular products:", error);
-    }
-  };
-
-  const handleScroll = useCallback(
-    (direction) => {
-      setCurrentSlide((prevSlide) =>
-        direction === "prev"
-          ? prevSlide === 0
-            ? Math.ceil(getProduct.length / itemsPerPage) - 1
-            : prevSlide - 1
-          : prevSlide === Math.ceil(getProduct.length / itemsPerPage) - 1
-          ? 0
-          : prevSlide + 1
-      );
-    },
-    [getProduct.length]
-  );
-
-  const isMobile = window.innerWidth <= 768; // Example condition for mobile view
-
-  const itemsPerPage = isMobile ? 1 : 3;
-
-  const visibleItems = useMemo(() => {
-    const items = [];
-    for (let i = 0; i < getProduct.length; i += itemsPerPage) {
-      items.push(getProduct.slice(i, i + itemsPerPage));
-    }
-    return items;
-  }, [getProduct, itemsPerPage]);
-
-  const getCartItems = async () => {
-    try {
-      const response = await Api.get(`api/get_cart/?user_id=${uid}`);
-      const cartItemsMap = response.data.reduce((acc, item) => {
-        acc[item.product_id] = item.quantity;
-        return acc;
-      }, {});
-      setCartItems(cartItemsMap);
-    } catch (error) {
-      console.error("Error fetching cart items:", error);
     }
   };
 
@@ -86,84 +34,114 @@ function Popular({ refreshCart }) {
       }, {});
       setStock(stockMap);
     } catch (error) {
-      console.error("Error getting stock:", error);
     }
   };
 
-  const onPressAddToCart = async (productId) => {
-    const accessToken = localStorage.getItem("access_token");
-    if (accessToken) {
-      try {
-        const response = await Api.post(`api/add_to_cart/`, {
-          product_id: productId,
-          u_id: uid,
-        });
-        setCartItems((prevCartItems) => ({
-          ...prevCartItems,
-          [productId]: (prevCartItems[productId] || 0) + 1,
-        }));
-        refreshCart();
-        console.log("Product added to cart:", response.data);
-      } catch (error) {
-        console.error("Error adding product to cart:", error);
-      }
-    } else {
-      let cart = JSON.parse(localStorage.getItem("cart")) || {};
-      cart[productId] = (cart[productId] || 0) + 1;
-      localStorage.setItem("cart", JSON.stringify(cart));
-      setCartItems(cart);
-      refreshCart();
-      console.log("Product added to cart in localStorage");
+  const getCartItems = async () => {
+    try {
+      const response = await Api.get(`api/get_cart/?user_id=${uid}`);
+      const cartItemsMap = response.data.reduce((acc, item) => {
+        acc[item.product_id] = item.quantity;
+        return acc;
+      }, {});
+      setCartGlobalItems(cartItemsMap);
+    } catch (error) {
     }
   };
-  
-  const updateCartItem = async (productId, action) => {
-    const accessToken = localStorage.getItem("access_token");
-    if (accessToken) {
+
+  useEffect(()=>{
+    getMostPopular();
+    getStock();
+    if (access_token){
+      getCartItems();
+    }
+    else {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      setCartGlobalItems(cart);
+    }
+  }, []);
+
+  const handleScroll = useCallback(
+    (direction) => {
+      setCurrentSlide((prevSlide) =>
+        direction === "prev"
+          ? prevSlide === 0
+            ? Math.ceil(popularProds.length / itemsPerPage) - 1
+            : prevSlide - 1
+          : prevSlide === Math.ceil(popularProds.length / itemsPerPage) - 1
+          ? 0
+          : prevSlide + 1
+      );
+    },
+    [popularProds.length]
+  );
+
+  const visibleItems = useMemo(() => {
+    const items = [];
+    for (let i = 0; i < popularProds.length; i += itemsPerPage) {
+      items.push(popularProds.slice(i, i + itemsPerPage));
+    }
+    return items;
+  }, [popularProds, itemsPerPage]);
+
+  const updateCartItems = async (productId, action) => {
+    setCartError(null);
+    if (access_token) {
       try {
         const endpoint = action === "add" ? "increase" : "decrease";
-        const response = await Api.post(`api/${endpoint}/main/`, {
+        let response = await Api.post(`api/${endpoint}/main/`, {
           product_id: productId,
           user_id: uid,
         });
-  
-        setCartItems((prevCartItems) => {
-          const newQuantity =
-            action === "add"
-              ? (prevCartItems[productId] || 0) + 1
-              : prevCartItems[productId] - 1;
-          if (newQuantity <= 0) {
-            const updatedCartItems = { ...prevCartItems };
-            delete updatedCartItems[productId];
-            return updatedCartItems;
-          } else {
-            return { ...prevCartItems, [productId]: newQuantity };
-          }
-        });
-        refreshCart();
-        console.log(`${action === "add" ? "Increased" : "Decreased"} quantity:`, response.data);
+        if (!response?.data?.error){
+          setCartGlobalItems(response?.data);
+        }
+        else if (response?.data?.error?.includes('less than 1')){
+          setCartGlobalItems(response?.data?.data);
+        }
+        else{
+          setCartError(productId);
+          setTimeout(()=>{
+            setCartError(null);
+          }, 200);
+        }
       } catch (error) {
-        console.error(`Error ${action === "add" ? "increasing" : "decreasing"} quantity:`, error);
+        // error handling;
       }
     } else {
-      // Save updated cart details to localStorage
-      let cart = JSON.parse(localStorage.getItem("cart")) || {};
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let productIndex = cart.findIndex(prod => prod?.id === productId);
+      let product;
       if (action === "add") {
-        cart[productId] = (cart[productId] || 0) + 1;
+        if (productIndex !== -1) {
+          cart[productIndex].quantity += 1;
+        } else {
+          product = popularProds.find(prod => prod?.id === productId);
+          if (product) {
+            product = { ...product, product_id: product.id, quantity: 1 };
+            cart.push(product);
+          }
+        }
       } else {
-        cart[productId] = (cart[productId] || 0) - 1;
-        if (cart[productId] <= 0) {
-          delete cart[productId];
+        if (cart?.length === 0 || !cart) {
+          return;
+        }
+        else {
+          if (productIndex !== -1) {
+            if (cart[productIndex].quantity > 1) {
+              cart[productIndex].quantity -= 1;
+            }
+            else {
+              cart.splice(productIndex, 1);
+            }
+          }
         }
       }
       localStorage.setItem("cart", JSON.stringify(cart));
-      setCartItems(cart);
-      refreshCart();
-      console.log(`${action === "add" ? "Increased" : "Decreased"} quantity in localStorage`);
+      setCartGlobalItems(cart);
     }
   };
 
-  
 
   return (
     <div>
@@ -183,10 +161,10 @@ function Popular({ refreshCart }) {
                     >
                       <div className="row gx-3 h-100 align-items-center justify-content-center">
                         {slideItems.map((item) => (
-                          <div key={item.id} style={{ marginRight: 50, maxWidth: "20%" }}>
+                          <div className="corsosel-new" key={item?.id} style={{ marginRight: 50, maxWidth: "20%", marginLeft: 50 }}>
                             <div className="card card-span h-100 rounded-3">
                               <img
-                                src={`http://app.frozenwala.com/${item.item_photo}`}
+                                src={item.item_photo ? `https://app.frozenwala.com/${item.item_photo}` : './../../../img/food.png'}
                                 alt={item.title}
                                 style={{
                                   aspectRatio: 1,
@@ -194,7 +172,7 @@ function Popular({ refreshCart }) {
                                   borderRadius: 20,
                                 }}
                               />
-                              <div className="card-body ps-0">
+                              <div className="card-body  card-main" style={{textAlign: 'center'}}>
                                 <h5 className="fw-bold text-1000 text-truncate mb-1">
                                   {item.title}
                                 </h5>
@@ -203,10 +181,11 @@ function Popular({ refreshCart }) {
                                 </span>
                               </div>
                             </div>
+                            {cartError === item.id ? <p className="text-center" style={{color: 'red', margin: 0}}>Out of stock</p> : null}
                             <div className="d-grid gap-2">
-                              {stock[item.id] === 0 ? (
+                              {stock[item?.id] === 0 ? (
                                 <button
-                                  className="badge bg-soft-success p-2"
+                                  className="badge bg-soft-success"
                                   style={{
                                     borderWidth: 0,
                                     cursor: "not-allowed",
@@ -220,18 +199,19 @@ function Popular({ refreshCart }) {
                                 </button>
                               ) : (
                                 <>
-                                  {cartItems[item.id] ? (
+                                  {cartGlobalItems.length > 0 && cartGlobalItems?.filter(prod=>prod?.product_id===item?.id)[0] ? (
                                     <div
-                                      className="badge bg-soft-success p-2"
+                                      className="badge bg-soft-success"
                                       style={{
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "space-around",
+                                        padding: '12px'
                                       }}
                                     >
                                       <button
                                         onClick={() =>
-                                          updateCartItem(item.id, "subtract")
+                                          updateCartItems(item?.id, "minus")
                                         }
                                         style={{
                                           borderWidth: 0,
@@ -246,11 +226,11 @@ function Popular({ refreshCart }) {
                                           fontSize: 18,
                                         }}
                                       >
-                                        {cartItems[item.id]}
+                                        {cartGlobalItems.length > 0 && cartGlobalItems?.filter(prod=>prod?.product_id===item?.id)[0]?.quantity}
                                       </span>
                                       <button
                                         onClick={() =>
-                                          updateCartItem(item.id, "add")
+                                          updateCartItems(item?.id, "add")
                                         }
                                         style={{
                                           borderWidth: 0,
@@ -265,7 +245,7 @@ function Popular({ refreshCart }) {
                                       style={{ borderWidth: 0 }}
                                       type="button"
                                       onClick={() =>
-                                        onPressAddToCart(item.id)
+                                        updateCartItems(item.id, 'add')
                                       }
                                       className="btn btn-lg btn-danger"
                                     >

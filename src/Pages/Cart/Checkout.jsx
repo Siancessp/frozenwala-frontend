@@ -4,7 +4,7 @@ import Footer from "../Home/Footer";
 import Navbar from "../Home/Navbar";
 import { useNavigate } from "react-router-dom";
 import useRazorpay from "react-razorpay";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const CheckoutPage = () => {
       const response = await Api.get(`api/get_cart/?user_id=${uid}`);
       setGetProduct(response.data);
     } catch (error) {
-      console.log("Error fetching cart items:", error);
+      // error handling;
     }
   };
 
@@ -55,7 +55,7 @@ const CheckoutPage = () => {
       setPreviousPrice(response.data.previous_price);
       setWalletValue(response.data.wallet_value);
     } catch (error) {
-      console.log("Error fetching total price:", error);
+      // error handling;
     }
   };
 
@@ -65,7 +65,7 @@ const CheckoutPage = () => {
       window.location.reload();
       toast.error("removed item from cart:");
     } catch (error) {
-      console.error("Error removing item from cart:", error);
+      // error handling;
     }
   };
 
@@ -78,17 +78,16 @@ const CheckoutPage = () => {
         toast.error("Coupon Code missing.");
       }
     } catch (error) {
-      console.log("Error applying coupon:", error);
+      // error handling;
     }
   };
 
   const applyWallet = async () => {
     try {
       await Api.post(`api/save_wallet_transaction/`, { user_id: uid });
-      console.log("pata nhi");
       window.location.reload();
     } catch (error) {
-      console.log("Error applying wallet:", error.response);
+      // error handling;
     }
   };
 
@@ -109,7 +108,7 @@ const CheckoutPage = () => {
         !zip ||
         !selectedOption)
     ) {
-      toast.success("Please fill in all the required fields.");
+      toast.error("Please fill in all the required fields.");
       return;
     }
 
@@ -148,12 +147,7 @@ const CheckoutPage = () => {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_signature: response.razorpay_signature,
             };
-
-            console.log("Payment success:", bodyData);
-
             const verify = await Api.post("api/verify_payment/", bodyData);
-            console.log("verify", verify);
-
             navigate("/home");
           },
           theme: { color: "#F37254" },
@@ -170,8 +164,7 @@ const CheckoutPage = () => {
         throw new Error("Failed to create order");
       }
     } catch (error) {
-      console.error("Payment error:", error);
-      // alert(Error: ${error.message});
+      // error handling
     }
   };
 
@@ -180,7 +173,7 @@ const CheckoutPage = () => {
       deliveryOption === "pickup" && !selectedPickup
     ) {
 
-       toast.success("Please select any time.");
+       toast.error("Please select any time.");
       return;
     }
     try {
@@ -195,9 +188,7 @@ const CheckoutPage = () => {
         pick_up: 1,
         walet_value: walletValue,
       };
-      console.log(bodyData);
       const response = await Api.post(`api/create_order/`, bodyData);
-      console.log(response.data);
         if (response.data.status === 'success') {
           const options = {
             currency: 'INR',
@@ -211,9 +202,6 @@ const CheckoutPage = () => {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_signature: response.razorpay_signature,
               };
-
-              console.log("Payment success:", bodyData);
-
               const verify = await Api.post('api/verify_payment/', bodyData);
 
                 navigate("/home");
@@ -235,8 +223,7 @@ const CheckoutPage = () => {
           throw new Error('Failed to create order');
         }
     } catch (error) {
-      console.error("Payment error:", error);
-      // alert(Error: ${error.message});
+      // error handling
     }
   };
 
@@ -245,7 +232,7 @@ const CheckoutPage = () => {
       const response = await Api.get(`api/wallet/?user_id=${uid}`);
       setWalletBalance(response.data.wallet_value);
     } catch (error) {
-      console.log("Error fetching wallet balance:", error);
+      // error handling;
     }
   };
 
@@ -262,6 +249,8 @@ const CheckoutPage = () => {
   };
 
   return (
+    <>
+    <ToastContainer/>
     <div>
       <Navbar />
       <div
@@ -344,19 +333,14 @@ const CheckoutPage = () => {
               >
                 {Object.entries(addressInfo).map(([key, value]) => (
                   <input
+                  className="checkout-input"
                     key={key}
                     type="text"
                     name={key}
                     placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
-                    style={{
-                      marginBottom: "10px",
-                      padding: "5px",
-                      border: "0 solid #E0E0E0",
-                      backgroundColor: "#f8f8f8",
-                      borderRadius: 5,
-                    }}
                     value={value}
                     onChange={handleChange}
+                 
                   />
                 ))}
                 <div style={{ marginTop: 10 }}>
@@ -393,17 +377,6 @@ const CheckoutPage = () => {
                     marginTop: "30px",
                   }}
                   onClick={handlePayment}
-                  // disabled={
-                  //   deliveryOption === "delivery" &&
-                  //   (!addressInfo.name ||
-                  //     !addressInfo.phone ||
-                  //     !addressInfo.address ||
-                  //     !addressInfo.city ||
-                  //     !addressInfo.state ||
-                  //     !addressInfo.country ||
-                  //     !addressInfo.zip ||
-                  //     !selectedOption)
-                  // }
                 >
                   Proceed to pay
                 </button>
@@ -459,7 +432,6 @@ const CheckoutPage = () => {
                   marginTop: "30px",
                 }}
                 onClick={handlePickupPayment}
-                // disabled={deliveryOption === "pickup" && !selectedPickup}
               >
                 Proceed to pay
               </button>
@@ -485,7 +457,7 @@ const CheckoutPage = () => {
             >
               <div style={{ display: "flex", width: "60%", borderRadius: 10 }}>
                 <img
-                  src={`https://app.frozenwala.com/media/${item.product_image}`}
+                  src={`https://app.frozenwala.com${item?.product_image?.includes('media/') ? item?.product_image : 'media/' + item?.product_image}`}
                   alt={item.name}
                   style={{ width: "70px", aspectRatio: 1, borderRadius: 10 }}
                 />
@@ -623,6 +595,7 @@ const CheckoutPage = () => {
       </div>
       <Footer />
     </div>
+    </>
   );
 };
 

@@ -12,6 +12,7 @@ import Adv from "./Home/Adv";
 import Footer from "./Home/Footer";
 import Special from "./Home/Special";
 
+
 function Home() {
   const navigate = useNavigate();
 
@@ -28,11 +29,11 @@ function Home() {
 
   const uid = localStorage.getItem("user_id");
   const access = localStorage.getItem("access_token");
-  console.log(access);
   return (
     <div>
       <main className="main" id="top">
         <Navbar refreshCart={refrest} />
+        
         <section className="py-5 overflow-hidden bg-primary" id="home">
           <div className="container">
             <div className="row flex-center">
@@ -54,93 +55,6 @@ function Home() {
                   <br className="d-none d-xxl-block" />
                   are accessible near you
                 </h1>
-                <div className="card w-xxl-75">
-                  <div className="card-body">
-                    <nav>
-                      <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button
-                          className={`nav-link ${
-                            activeTab === "Delivery" ? "active" : ""
-                          } mb-3`}
-                          onClick={() => handleTabClick("Delivery")}
-                          role="tab"
-                          aria-selected={activeTab === "Delivery"}
-                        >
-                          <i className="fas fa-motorcycle me-2"></i>Delivery
-                        </button>
-                        <button
-                          className={`nav-link ${
-                            activeTab === "Pickup" ? "active" : ""
-                          } mb-3`}
-                          onClick={() => handleTabClick("Pickup")}
-                          role="tab"
-                          aria-selected={activeTab === "Pickup"}
-                        >
-                          <i className="fas fa-shopping-bag me-2"></i>Pickup
-                        </button>
-                      </div>
-                    </nav>
-                    <div className="tab-content mt-3" id="nav-tabContent">
-                      <div
-                        className="tab-pane fade show active"
-                        id="nav-home"
-                        role="tabpanel"
-                        aria-labelledby="nav-home-tab"
-                      >
-                        <form className="row gx-2 gy-2 align-items-center">
-                          <div className="col">
-                            <div className="input-group-icon">
-                              <i className="fas fa-map-marker-alt text-danger input-box-icon"></i>
-
-                              <input
-                                className="form-control input-box form-foodwagon-control"
-                                id="inputDelivery"
-                                type="text"
-                                placeholder="Enter Your Address"
-                              />
-                            </div>
-                          </div>
-                          <div className="d-grid gap-3 col-sm-auto">
-                            <button className="btn btn-danger" type="submit">
-                              Find Food
-                            </button>
-                          </div>
-                        </form>
-                      </div>
-                      <div
-                        className="tab-pane fade"
-                        id="nav-profile"
-                        role="tabpanel"
-                        aria-labelledby="nav-profile-tab"
-                      >
-                        <form className="row gx-4 gy-2 align-items-center">
-                          <div className="col">
-                            <div className="input-group-icon">
-                              <i className="fas fa-map-marker-alt text-danger input-box-icon"></i>
-                              <label
-                                className="visually-hidden"
-                                htmlFor="inputPickup"
-                              >
-                                Address
-                              </label>
-                              <input
-                                className="form-control input-box form-foodwagon-control"
-                                id="inputPickup"
-                                type="text"
-                                placeholder="Enter Your Address"
-                              />
-                            </div>
-                          </div>
-                          <div className="d-grid gap-3 col-sm-auto">
-                            <button className="btn btn-danger" type="submit">
-                              Find Food
-                            </button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -148,15 +62,15 @@ function Home() {
 
         <Offers />
 
-        <How />
+       
 
-      <ParentComponent refRestCart={refRestCart}/>
-
+      <ParentComponent refRestCart={refRestCart} page='Home' />
+      <How />
        {/* <SearchByFood/> */}
         <Adv/>
 
        <Special/>
-
+       
         <section className="py-0">
           <div
             className="bg-holder"
@@ -174,7 +88,7 @@ function Home() {
                   Are you ready to order <br />
                   with the best deals?{" "}
                 </h1>
-                <a className="btn btn-danger" href="/menu" >
+                <a className="btn btn-danger" href="/products" >
                   {" "}
                   PROCEED TO ORDER<i className="fas fa-chevron-right ms-2"></i>
                 </a>

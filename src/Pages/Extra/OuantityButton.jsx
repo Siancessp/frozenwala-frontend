@@ -13,7 +13,7 @@ const QuantityButton = ({ product, getTotalPrice, onPressAddToCart }) => {
       );
       setQuantity(response.data.quantity);
     } catch (error) {
-      console.log('Error:', error);
+      // error handling
     }
   };
 
@@ -22,7 +22,7 @@ const QuantityButton = ({ product, getTotalPrice, onPressAddToCart }) => {
       const response = await Api.get(`api/stock/?product_id=${product.id}`);
       setStock(response.data[0].openingstock);
     } catch (error) {
-      console.log('Error:', error);
+      // error handling
     }
   };
 
@@ -55,8 +55,7 @@ const QuantityButton = ({ product, getTotalPrice, onPressAddToCart }) => {
         alert(`Only ${stock} available. You cannot add more.`);
       }
     } catch (error) {
-      console.log('Error:', error);
-      // You may handle errors differently in React.js, such as displaying an error message to the user
+      // error handling
     }
   };
 
@@ -81,8 +80,7 @@ const QuantityButton = ({ product, getTotalPrice, onPressAddToCart }) => {
         alert('Quantity decreased');
       }
     } catch (error) {
-      console.log('Error:', error);
-      alert('Failed to decrease quantity');
+      // error handling
     }
   };
 

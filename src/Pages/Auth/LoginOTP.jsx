@@ -1,35 +1,53 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Api from "../Utills/Api";
+import Api, {BASE_URL} from "../Utills/Api";
 import Spinner from "../../Spinner"; // Assuming Spinner.js is in the same directory
+
 
 function LoginOTP() {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  let location = useLocation();
-  let { phone } = location.state;
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const phone = queryParams.get('phone');
+
+
+  const setOTP = (e)=>{
+    if (!/^\d*$/.test(e.target.value)){
+      return;
+    }
+    setOtp(e.target.value);
+  }
+
+  useEffect(()=>{
+    if (!phone){
+      navigate('/login');
+    }
+  }, []);
 
   const addCartData = async () => {
-    let cartLocalItems = localStorage.getItem('cart');
-    const uid = localStorage.getItem('user_id');
+    let cartLocalItems = JSON.parse(localStorage.getItem("cart")) || [];
+    const user_id = localStorage.getItem('user_id');
 
-    if (cartLocalItems && uid) {
-      cartLocalItems = JSON.parse(cartLocalItems);
-      for (let productId in cartLocalItems) {
-        const quantity = cartLocalItems[productId];
-        try {
-          await Api.post('api/add_to_cart/', {
-            product_id: parseInt(productId),
-            u_id: uid,
-            quantity: quantity,
-          });
-        } catch (error) {
-          console.error('Error adding product to cart:', error);
-        }
+    if (cartLocalItems && cartLocalItems.length > 0 && user_id) {
+      let cartData = cartLocalItems.map(item => ({
+        id: item.id,
+        qty: item.quantity
+      }));
+      let data = {
+        cart: cartData,
+        user_id: user_id
+      };
+      try{
+        await Api.post('api/add_to_cart/', data);
+        localStorage.removeItem('cart');
+      }
+      catch(error){
+        // error handling;
       }
     }
   };
@@ -46,20 +64,22 @@ function LoginOTP() {
           phone_number: phone,
         };
         const response = await axios.post(
-          "https://app.frozenwala.com/base/login/",
+          `${BASE_URL}login/`,
           body
         );
-        setLoading(false);
+        toast.success('Login successfully.', {autoClose: 1000});
         localStorage.setItem("user_id", response.data.user_id);
         localStorage.setItem("access_token", response.data.access);
-        addCartData()
-        navigate("/home");
-        setOtp("");
+        addCartData();
+        setTimeout(()=>{
+          setLoading(false);
+          setOtp("");
+          window.location.href = '/';
+        }, 1000);
       }
     } catch (error) {
       setLoading(false);
       toast.error("Invalid OTP");
-      console.log(error);
     }
   };
 
@@ -87,6 +107,7 @@ function LoginOTP() {
           <a
             className="navbar-brand d-inline-flex"
             onClick={() => navigate("/home")}
+            style={{alignItems: 'center', cursor: 'pointer'}}
           >
             <img
               className="d-inline-block"
@@ -98,17 +119,6 @@ function LoginOTP() {
               Frozenwala
             </span>
           </a>
-          {/* <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"> </span>
-          </button> */}
         </div>
       </nav>
       <form
@@ -130,11 +140,9 @@ function LoginOTP() {
         </h3>
         <h6>Enter the OTP</h6>
         <input
-          type="text"
           placeholder="Enter the OTP"
-          inputMode="numeric"
           value={otp}
-          onChange={(e) => setOtp(e.target.value)}
+          onChange={setOTP}
           className="form-control input-box form-foodwagon-control"
           style={{
             padding: "10px",

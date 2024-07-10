@@ -11,7 +11,7 @@ function Logout() {
         localStorage.removeItem("chakra-ui-color-mode");
         localStorage.removeItem("rzp_device_id");
         localStorage.removeItem("cart");
-        navigate("/login");
+        window.location.href = '/login';
       };
   return (
     <div style={{display:"grid", justifyContent:"center", alignItems:"center",marginTop:200}}>

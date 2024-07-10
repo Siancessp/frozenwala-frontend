@@ -1,38 +1,61 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import { BASE_URL } from "../Utills/Api";
+
 
 function Signupotp() {
-  let location = useLocation();
-  let { name, phone } = location.state;
-  console.log(name, phone);
-
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const name = queryParams.get('name');
+  const phone = queryParams.get('phone');
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    if (name && phone) {
+      toast.success('OTP has been sent successfully.', {autoClose: 1500});
+    }
+    else{
+      navigate('/signup');
+    }
+  }, []);
+
+  const setOTP = (e)=>{
+    if (!/^\d*$/.test(e.target.value)){
+      return;
+    }
+    setOtp(e.target.value);
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       if (otp === "") {
-        alert("Enter OTP!");
+        toast.error('Enter OTP!', {autoClose: 1500});
+        
       } else {
         const body = {
           otp_value: otp,
           phone_number: phone,
           name: name,
         };
-        console.log(body);
         const response = await axios.post(
-          "https://app.frozenwala.com/base/register/",
+          `${BASE_URL}register/`,
           body
         );
-        console.log("Logged in");
-        navigate("/login");
-        setOtp("");
+        localStorage.setItem("user_id", response.data.user_id);
+        localStorage.setItem("access_token", response.data.access);
+
+        toast.success('Registeration completed successfully.', {autoClose: 1000});
+        setTimeout(()=>{
+          window.location.href = '/';
+          setOtp("");
+        }, 1000);
       }
     } catch (error) {
-      console.log(error);
-      alert(error);
+      toast.error(error?.response?.data?.error, {autoClose: 1500});
     }
   };
 
@@ -41,6 +64,8 @@ function Signupotp() {
   };
 
   return (
+    <>
+    <ToastContainer />
     <div
       style={{
         display: "flex",
@@ -60,6 +85,7 @@ function Signupotp() {
           <a
             className="navbar-brand d-inline-flex"
             onClick={() => navigate("/home")}
+            style={{alignItems: 'center', cursor: 'pointer'}}
           >
             <img
               className="d-inline-block"
@@ -103,11 +129,10 @@ function Signupotp() {
         </h3>
         <h6>Enter the OTP</h6>
         <input
-          type="number"
           placeholder="Enter the OTP"
-          inputMode="numeric"
           value={otp}
-          onChange={(e) => setOtp(e.target.value)}
+          onChange={setOTP}
+          maxLength={6}
           className="form-control input-box form-foodwagon-control"
           style={{
             padding: "10px",
@@ -132,33 +157,9 @@ function Signupotp() {
         >
           Submit
         </button>
-        <div
-          style={{
-            flexDirection: "row",
-            display: "flex",
-            marginTop: "10px",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <span>Didn't receive?</span>
-          <button
-            className="btn text-warning"
-            type="button"
-            onClick={handleClick}
-            style={{
-              backgroundColor: "transparent",
-              border: "none",
-              marginLeft: "5px",
-              padding: "0",
-              textDecoration: "underline",
-            }}
-          >
-            Resend
-          </button>
-        </div>
       </form>
     </div>
+    </>
   );
 }
 

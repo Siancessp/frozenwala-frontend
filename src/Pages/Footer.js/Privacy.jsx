@@ -6,7 +6,7 @@ function Privacy() {
   return (
     <div>
     <Navbar/>
-      <div class="container mt-8 mb-8">
+      <div className="container mt-8 mb-8">
         <h3>Privacy Policy</h3>
         <p>Updated at 2023-04-21</p>
 

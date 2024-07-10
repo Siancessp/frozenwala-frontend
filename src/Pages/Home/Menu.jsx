@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Api from "../Utills/Api";
+import Api, { BASE_URL } from "../Utills/Api";
 import axios from "axios";
 
 function Menu({ onSelectCategory }) {
@@ -19,11 +19,11 @@ function Menu({ onSelectCategory }) {
         const response = await Api.get(`api/categories/`);
         setCategories(response.data);
       } else {
-        const response = await axios.get(`https://app.frozenwala.com/base/api/auth/categories/`);
+        const response = await axios.get(`${BASE_URL}api/auth/categories/`);
         setCategories(response.data);
       }
     } catch (error) {
-      console.error("Error fetching menu:", error);
+      // error handling
     }
   };
   
@@ -36,7 +36,6 @@ function Menu({ onSelectCategory }) {
         onSelectCategory("all", response.data);
       } catch (error) {
         setError("Error fetching items. Please try again later.");
-        console.error("Error fetching items:", error);
       }
     } else {
       onSelectCategory(categoryId);
@@ -77,12 +76,13 @@ function Menu({ onSelectCategory }) {
             paddingInline: 20,
             borderTopRightRadius: 10,
             borderTopLeftRadius: 10,
+            textAlign: 'left',
           }}
           onClick={() => handleClick("all")}
           onMouseEnter={() => handleMouseEnter("all")}
           onMouseLeave={handleMouseLeave}
         >
-          <span className="category-name" style={{ fontWeight: "600" }}>
+          <span className="category-name" style={{ fontWeight: "600", textAlign: 'left' }}>
             All
           </span>
         </button>
@@ -108,6 +108,7 @@ function Menu({ onSelectCategory }) {
               paddingInline: 20,
               borderTopRightRadius: 10,
               borderTopLeftRadius: 10,
+              textAlign: 'left',
             }}
             onClick={() => {
               handleClick(category.id);
@@ -116,7 +117,7 @@ function Menu({ onSelectCategory }) {
             onMouseEnter={() => handleMouseEnter(category.id)}
             onMouseLeave={handleMouseLeave}
           >
-            <span className="category-name" style={{ fontWeight: "600" }}>
+            <span className="category-name" style={{ fontWeight: "600", textAlign: 'left' }}>
               {category.name}
             </span>
           </button>

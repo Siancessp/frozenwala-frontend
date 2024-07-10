@@ -23,7 +23,6 @@ const Sidebar = ({ activeButton, onButtonClick }) => {
         setPhoto(response.data.profile_photo);
         setName(response.data.name);
       } catch (error) {
-        console.log("Error fetching profile:", error);
         // Handle error here
       } finally {
         setLoading(false);
@@ -36,7 +35,7 @@ const Sidebar = ({ activeButton, onButtonClick }) => {
   return (
     <div
       style={{
-        width: "300px",
+        width: "500px",
         padding: "20px",
         borderRadius: "10px",
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",

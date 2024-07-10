@@ -11,9 +11,8 @@ const OrderHistory = () => {
       const uid = localStorage.getItem("user_id");
       const response = await Api.get(`api/orders/?user_id=${uid}`);
       setHistoryData(response.data);
-      console.log(response.data);
     } catch (error) {
-      console.log("Error fetching history:", error);
+     // error handling;
     }
   };
 

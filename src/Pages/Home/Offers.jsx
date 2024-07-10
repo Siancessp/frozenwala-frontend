@@ -8,11 +8,9 @@ function Offers() {
   const getOffer = async () => {
     try {
       const response = await Api.get('api/couponlist/');
-      console.log("yoyo", response.data);
       setGetProduct(response.data);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false); 
     }
   };

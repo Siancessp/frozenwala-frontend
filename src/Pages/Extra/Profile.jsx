@@ -12,11 +12,13 @@ const App = () => {
   };
 
   return (
+    <>
+     <Navbar />   
     <div>
-      <Navbar />
+     
       <div>
-        <main className="main" id="top" style={{ paddingTop: "60px" }}>
-          <div style={{ display: "flex" }}>
+        <main className="main" id="top" style={{ paddingTop: "120px" }}>
+          <div className="profile-wrap">
             <Sidebar
               activeButton={activeButton}
               onButtonClick={handleButtonClick}
@@ -28,6 +30,7 @@ const App = () => {
       </div>
      
     </div>
+    </>
   );
 };
 

@@ -15,25 +15,23 @@ function Login() {
     event.preventDefault();
     try {
       if (!phone.trim()) {
-        toast.error("Enter Phone Number");
+        toast.error("Enter Phone Number", {autoClose: 1500});
       } else if (phone.trim().length !== 10 || !/^\d+$/.test(phone.trim())) {
-        toast.error("Phone number must be of 10 digits");
+        toast.error("Phone number must be of 10 digits", {autoClose: 1500});
       } else {
         setLoading(true);
         const body = {
           phone_number: phone,
         };
 
-        const response = await Api.post("api/login-send_sms/", body);
+        await Api.post("api/login-send_sms/", body);
         setLoading(false);
-        console.log("OTP sent successfully");
-        navigate("/loginotp", { state: { phone: phone } });
+        navigate(`/loginotp?phone=${phone}`);
         setPhone("");
       }
     } catch (error) {
       setLoading(false);
-      toast.error("Phone Number does not exist");
-      console.log(error);
+      toast.error("Phone Number is not registered.", {autoClose: 1500});
     }
   };
 
@@ -61,6 +59,7 @@ function Login() {
           <a
             className="navbar-brand d-inline-flex"
             onClick={() => navigate("/home")}
+            style={{alignItems: 'center', cursor: 'pointer'}}
           >
             <img
               className="d-inline-block"
@@ -72,17 +71,6 @@ function Login() {
               Frozenwala
             </span>
           </a>
-          {/* <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"> </span>
-          </button> */}
         </div>
       </nav>
       <form

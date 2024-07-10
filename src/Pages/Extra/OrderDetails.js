@@ -24,7 +24,6 @@ const OrderDetails = ({  }) => {
       try {
         const response = await Api.get(`api/invoice/?order_id=${orderId}`);
         const orderDetails = response.data.order_details[0];
-        console.log("jdfg",response.data);
         setAddress(orderDetails.address);
         setCity(orderDetails.city);
         setName(orderDetails.newname);
@@ -38,7 +37,7 @@ const OrderDetails = ({  }) => {
         // setOrderId(orderDetails.order_id);
         setProducts(response.data.products);
       } catch (error) {
-        console.log('Error fetching:', error);
+        // error handling
       }
     };
 
@@ -62,7 +61,7 @@ const OrderDetails = ({  }) => {
       document.body.appendChild(link);
       link.click();
     } catch (error) {
-      console.log('Error fetching pdf:', error);
+      // error handling
     }
   };
 

@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const baseUrl = 'https://app.frozenwala.com/base/';
+export const BASE_URL = 'https://app.frozenwala.com/base/';
 
 const get = async endPoints => {
   const accessToken = localStorage.getItem('access_token');
 
-  return axios.get(baseUrl + endPoints, {
+  return axios.get(BASE_URL + endPoints, {
     headers: {
         Authorization: `Bearer ${accessToken}`, // Use the passed token
       },
@@ -15,7 +15,7 @@ const get = async endPoints => {
 const postFormdata = async (endPoints, formData) => {
   const accessToken = localStorage.getItem('access_token');
 
-  return axios.post(baseUrl + endPoints, formData, {
+  return axios.post(BASE_URL + endPoints, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${accessToken}`, // Use the passed token
@@ -26,7 +26,7 @@ const postFormdata = async (endPoints, formData) => {
 const post = async (endPoints, body) => {
   const accessToken = localStorage.getItem('access_token');
 
-  return axios.post(baseUrl + endPoints, body, {
+  return axios.post(BASE_URL + endPoints, body, {
     headers: {
         Authorization: `Bearer ${accessToken}`, // Use the passed token
       },
@@ -36,7 +36,7 @@ const post = async (endPoints, body) => {
 const remove = async (endPoints) => {
   const accessToken = localStorage.getItem('access_token');
 
-  return axios.delete(baseUrl + endPoints, {
+  return axios.delete(BASE_URL + endPoints, {
     headers: {
         Authorization: `Bearer ${accessToken}`, // Use the passed token
       },

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Api from "../Utills/Api";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+
 
 function Signup() {
   const [phone, setPhone] = useState("");
@@ -13,23 +13,24 @@ function Signup() {
     event.preventDefault();
     try {
       if (!name.trim() || !phone.trim()) {
-        alert("Enter Phone Number or Name");
+        toast.error('Name and phone number are required.', {autoClose: 1500});
       } else if (phone.trim().length !== 10 || !/^\d+$/.test(phone.trim())) {
-        alert("Phone number must be of 10 digits");
+        toast.error('Phone number must be of 10 digits.', {autoClose: 1500});
       } else {
         const body = {
           phone_number: phone,
         };
-
-        const response = await Api.post("api/send_sms/", body);
-        console.log("OTP sent successfully");
-        navigate("/signupotp", { state: { name: name, phone: phone } });
+        await Api.post("api/send_sms/", body);
+        navigate(`/signupotp?name=${name}&phone=${phone}`);
         setPhone("");
       }
     } catch (error) {
-      toast.error("Phone Number does not exist");
-      alert("Phone number already exist")
-      console.log(error);
+      if (error?.response?.data?.error?.includes('Phone')){
+        toast.error(error?.response?.data?.error, {autoClose: 1500});
+      }
+      else{
+        toast.error('Something went wrong, please try again.', {autoClose: 1500});
+      }
     }
   };
 
@@ -38,6 +39,8 @@ function Signup() {
   };
 
   return (
+    <>
+    <ToastContainer />
     <div
       style={{
         display: "flex",
@@ -57,6 +60,7 @@ function Signup() {
           <a
             className="navbar-brand d-inline-flex"
             onClick={() => navigate("/home")}
+            style={{alignItems: 'center', cursor: 'pointer'}}
           >
             <img
               className="d-inline-block"
@@ -150,7 +154,7 @@ function Signup() {
             justifyContent: "center",
           }}
         >
-          <span>Don't have an account?</span>
+          <span>Already have an account?</span>
           <button
             className="btn text-warning"
             type="button"
@@ -168,6 +172,7 @@ function Signup() {
         </div>
       </form>
     </div>
+    </>
   );
 }
 

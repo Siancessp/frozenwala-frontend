@@ -74,7 +74,7 @@ function Special() {
                         <div className="d-grid bottom-0">
                           <a
                             className="btn btn-lg btn-primary mt-xl-6"
-                            href="/menu"
+                            href="/products"
                             target="_blank"
                           >
                             PROCEED TO ORDER

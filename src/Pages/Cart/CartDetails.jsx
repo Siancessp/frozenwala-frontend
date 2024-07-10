@@ -1,213 +1,147 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Navbar from "../Home/Navbar";
 import Footer from "../Home/Footer";
 import Api from "../Utills/Api";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { MyContext } from "../Utills/MyContext";
 
 
 function CartDetails() {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const access_token = localStorage.getItem('access_token');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [couponApplied, setCouponApplied] = useState(false);
   const [walletApplied, setWalletApplied] = useState(false);
-
   const uid = localStorage.getItem("user_id");
   const [totalPrice, setTotalPrice] = useState(0);
   const [deliveryCharge, setDeliveryCharge] = useState(0);
   const [discountPrice, setDiscount] = useState(0);
   const [previousPrice, setPreviousPrice] = useState(0);
+  let delvCharges = localStorage.getItem('deliveryCharges');
   const [finalPrice, setFinalPrice] = useState({
     totalPrice: 0,
-    delivery_charges: 30,
+    delivery_charges: delvCharges ? delvCharges : 0,
     discount_price: 0,
     finalAmount: 0,
   });
+  const { cartGlobalItems, setCartGlobalItems } = useContext(MyContext);
+  const access_token = localStorage.getItem('access_token');
+  const [cartError, setCartError] = useState(null);
 
-  const getProducts = async () => {
+
+  const getCartItems = async () => {
     try {
       const response = await Api.get(`api/get_cart/?user_id=${uid}`);
-      console.log('+++++++++++++', response?.data);
-      for (let data of response?.data){
-        data['totalPrice'] = data.price;
-      }
-      console.log('+++++++++++++', response?.data);
-      setCartItems(response.data);
-      console.log(response.data);
+      setCartGlobalItems(response.data);
     } catch (error) {
-      setError("Error fetching cart items.");
-      console.log("Error fetching cart items:", error);
-    }
-  };
-
-  const getAllProducts = async () => {
-    try {
-      if (uid) {
-        const response = await Api.get(`api/product-all/`);
-        setProducts(response.data);
-      } else {
-        const response = await axios.get(`https://app.frozenwala.com/base/api/auth/product-all/`);
-        setProducts(response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching all products:", error);
+      // error handling;
     }
   };
 
   useEffect(() => {
-    if (!access_token){
-      getAllProducts();
+    if (!access_token) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      setCartGlobalItems(cart);
     }
-  }, [])
+    else {
+      getCartItems();
+    }
+  }, [access_token, setCartGlobalItems]);
 
-  useEffect(()=>{
-    let totalPrice = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  useEffect(() => {
+    let cart_items = cartGlobalItems?.map(item => {
+      item['totalPrice'] = item?.item_new_price * item?.quantity;
+      return item;
+    });
+    let totalPrice = cartGlobalItems?.reduce((total, item) => total + (item.item_new_price * item.quantity), 0);
     setFinalPrice({
       ...finalPrice,
       totalPrice: totalPrice,
-      finalAmount: totalPrice,
+      finalAmount: parseFloat(totalPrice) + parseFloat(finalPrice.delivery_charges),
     });
-  }, [cartItems]);
-  
+    setCartItems(cart_items);
+  }, [cartGlobalItems]);
 
-  useEffect(() => {
+  const removeCartItem = (itemId) => {
     if (access_token) {
-      getProducts();
-    } else {
-      let cartLocalItems = localStorage.getItem('cart');
-      if (cartLocalItems) {
-        cartLocalItems = JSON.parse(cartLocalItems);
-        let itemIds = Object.keys(cartLocalItems);
-        const filteredProducts = products?.filter(product => itemIds?.includes(product.id.toString()));
-        
-        const updatedProducts = filteredProducts.map(prod => {
-          let qty = cartLocalItems[prod.id];
-          return {
-            ...prod,
-            quantity: qty,
-            price: prod.item_new_price,
-            product_image: prod.item_photo,
-            product_name: prod.title,
-            totalPrice: qty * prod.item_new_price,
-          };
-        });
-        setCartItems(updatedProducts);
-      }
-    }
-  }, [products]);
-
-  const getTotalPrice = async () => {
-    setLoading(true);
-    try {
-        const response = await Api.get(`api/get_total_price/?user_id=${uid}`);
-        console.log("Total Price Response:", response.data);
-        const totalPrice = response.data.total_price;
-        const deliveryCharge = response.data.delivery_charge;
-        const discount = response.data.discounted_price;
-        const previousPrice = response.data.previous_price;
-        setTotalPrice(totalPrice);
-        setDeliveryCharge(deliveryCharge);
-        setDiscount(discount);
-        setPreviousPrice(previousPrice);
-
-        setLoading(false); 
-      
-    } catch (error) {
-      setError("Error fetching total price.");
-      console.log("Error fetching total price:", error.response);
-      setLoading(false);
-    }
-  };
-
-  const removeItemFromCart = async (itemId) => {
-    try {
-      await Api.remove(`api/remove-cart-item/?cart_id=${itemId}`);
-      if (!access_token){
-        // getTotalPrice();
-      }
-      
-      getProducts();
-    } catch (error) {
-      console.error("Error removing item from cart:", error);
-    }
-  };
-
-  
-  const updateCartItems = async(id, type, quantity=null)=>{
-    if (access_token){
-      if (type === 'plus') {
-        try {
-          await Api.post(`api/increase/`, { cart_id: id });
-          getProducts();
-        } catch (error) {
-          console.log("Error decreasing:", error);
-        }
-      }
-      else {
-        if (quantity === 1) {
-          await removeItemFromCart(id);
-        } else {
-          try {
-            await Api.post(`api/decrease/`, { cart_id: id });
-            if (!access_token){
-              // getTotalPrice();
-            }
-            getProducts();
-          } catch (error) {
-            console.log("Error decreasing:", error);
-          }
-        }
-      }
+      updateCartItems(itemId, 'remove');
     }
     else {
-      let updatedItems;
-      if (type === 'plus') {
-        updatedItems = cartItems.map(item => {
-          if (item.id === id) {
-            return { ...item, quantity: item.quantity + 1 };
-          }
-          if (!access_token){
-            // getTotalPrice();
-          }
-          return item;
-        });
-      } else if (type === 'minus') {
-        updatedItems = cartItems.map(item => {
-          if (item.id === id && item.quantity > 0) {
-            return { ...item, quantity: item.quantity - 1 };
-          }
-          if (!access_token){
-            // getTotalPrice();
-          }
-          return item;
-        });
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart?.length === 0 || !cart) {
+        return;
       }
-      updatedItems = updatedItems.filter(item => item.quantity > 0);
-      updatedItems = updatedItems.map(prod => {
-        return {
-          ...prod,
-          totalPrice: prod.price * prod.quantity
-        };
-      });
-      setCartItems(prevItems => updatedItems);
-      const localStorageData = {};
-      for (let item of updatedItems) {
-        localStorageData[item.id] = item.quantity;
+      let productIndex = cart.findIndex(prod => prod?.id === itemId);
+      if (productIndex !== -1) {
+        cart.splice(productIndex, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        setCartGlobalItems(cart);
       }
-      localStorage.setItem('cart', JSON.stringify(localStorageData));
     }
   }
 
   const checkoutNow = () => {
-    const accessToken = localStorage.getItem("access_token");
-    if (accessToken) {
-      navigate("/checkout");
-    }else{
-      navigate("/login");
+      const accessToken = localStorage.getItem("access_token");
+      if (accessToken) {
+        navigate("/checkout");
+      }else{
+        navigate("/login");
+    }
+  };
+  const updateCartItems = async (productId, action) => {
+    setCartError(null);
+    if (access_token) {
+      try {
+        const endpoint = action === "add" ? "increase" : "decrease";
+        let response = await Api.post(`api/${endpoint}/main/`, {
+          product_id: productId,
+          user_id: uid,
+          action: action
+        });
+        if (!response?.data?.error) {
+          setCartGlobalItems(response?.data);
+        }
+        else if (response?.data?.error?.includes('less than 1')) {
+          setCartGlobalItems(response?.data?.data);
+        }
+        else {
+          setCartError(productId);
+          setTimeout(() => {
+            setCartError(null);
+          }, 200);
+        }
+      } catch (error) {
+        // error handling;
+      }
+    } else {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let productIndex = cart.findIndex(prod => prod?.id === productId);
+      if (action === "add") {
+        if (productIndex !== -1) {
+          cart[productIndex].quantity += 1;
+        } else {
+          return;
+        }
+      } else {
+        if (cart?.length === 0 || !cart) {
+          return;
+        }
+        else {
+          if (productIndex !== -1) {
+            if (cart[productIndex].quantity > 1) {
+              cart[productIndex].quantity -= 1;
+            }
+            else {
+              cart.splice(productIndex, 1);
+            }
+          }
+        }
+      }
+      localStorage.setItem("cart", JSON.stringify(cart));
+      setCartGlobalItems(cart);
     }
   };
 
@@ -218,7 +152,7 @@ function CartDetails() {
       <main
         className="main"
         id="top"
-        style={{ paddingTop: "70px", margin: 50, textAlign: "center" }}
+        style={{ paddingTop: "100px", margin: 50, textAlign: "center" }}
       >
         {loading ? (
           <p>Loading...</p>
@@ -235,8 +169,7 @@ function CartDetails() {
               <div
                 style={{
                   flex: 1,
-                  minWidth: "400px",
-                  maxWidth: "600px",
+
                   borderRadius: "10px",
                   marginBottom: "130px",
                   padding: "50px 10px 10px 10px"
@@ -256,8 +189,8 @@ function CartDetails() {
                     }}
                   >
                     <img
-                      src={`https://app.frozenwala.com/${item?.product_image?.includes('media/') ? item?.product_image : 'media/' + item?.product_image}`}
-                      alt={item?.product_name}
+                      src={`https://app.frozenwala.com${item?.item_photo?.includes('media/') ? item?.item_photo : 'media/' + item?.item_photo}`}
+                      alt={item?.title}
                       style={{
                         width: "100px",
                         height: "100px",
@@ -286,21 +219,22 @@ function CartDetails() {
                               marginTop: 2,
                             }}
                           >
-                            {item?.product_name}
+                            {item?.title}
                           </h3>
-                          <p style={{ color: "#888", marginBottom: "5px" }}>
+                          <p style={{ color: "#888", marginBottom: "5px", textAlign: 'start' }}>
                             Price: ₹{item?.totalPrice}
                           </p>
                           <div style={{ display: "flex", alignItems: "center" }}>
-                            <button onClick={() => updateCartItems(item?.id, 'minus', item?.quantity)}>−</button>
+                            <button className="cart-btn" onClick={() => updateCartItems(item?.product_id, 'minus')}>−</button>
                             <span style={{ margin: "0 10px" }}>{item?.quantity}</span>
-                            <button onClick={() => updateCartItems(item?.id, 'plus')}>+</button>
+                            <button className="cart-btn" onClick={() => updateCartItems(item?.product_id, 'add')}>+</button>
+                            {cartError === item.product_id ? <p className="text-center" style={{ color: 'red', margin: 0, marginLeft: '5px' }}>Out of stock</p> : null}
                           </div>
                         </div>
                       </div>
                     </div>
                     <button
-                      onClick={() => removeItemFromCart(item.id)}
+                      onClick={() => removeCartItem(item.product_id)}
                       style={{
                         backgroundColor: "#F17228",
                         color: "white",

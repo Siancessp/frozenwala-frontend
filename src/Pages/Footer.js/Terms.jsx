@@ -6,7 +6,7 @@ function Terms() {
   return (
     <div>
     <Navbar/>
-      <div class="container mb-8 mt-8">
+      <div className="container mb-8 mt-8">
         <h3>Terms & Conditions</h3>
         <p>Updated at 2023-04-21</p>
 

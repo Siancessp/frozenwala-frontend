@@ -6,12 +6,12 @@ function AboutUs() {
   return (
     <div>
         <Navbar/>
-        <section class="py-5 overflow-hidden" id="home">
+        <section className="py-5 overflow-hidden" id="home">
    
-<div class="container mt-8" id="dish_list">
-    <div class="row h-100">
-        <div class="col-lg-7 mx-auto text-center mb-6">
-            <h5 class="fw-bold fs-3 fs-lg-5 lh-sm mb-3">About Us</h5>
+<div className="container mt-8" id="dish_list">
+    <div className="row h-100">
+        <div className="col-lg-7 mx-auto text-center mb-6">
+            <h5 className="fw-bold fs-3 fs-lg-5 lh-sm mb-3">About Us</h5>
         </div>
     </div>
             <h3>FROZENWALA(SARFARAZ)</h3>

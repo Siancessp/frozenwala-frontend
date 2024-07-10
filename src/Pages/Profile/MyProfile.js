@@ -11,29 +11,28 @@ const MyProfile = () => {
   const [location, setLocation] = useState("");
   const [profileImage, setProfileImage] = useState(null);
 
- 
+
 
   useEffect(() => {
     const getProfile = async () => {
-  const uid = localStorage.getItem("user_id");
+      const uid = localStorage.getItem("user_id");
 
-    try {
-      const response = await Api.get(`api/profile/?user_id=${uid}`);
-      console.log("get", response.data.profile_photo);
-      setPhoto(response.data.profile_photo);
-      setEmail(response.data.email);
-      setName(response.data.name);
-      setPhone(response.data.phone_number);
-      setLocation(response.data.bio);
-    } catch (error) {
-      console.log("Error fetching profile:", error);
+      try {
+        const response = await Api.get(`api/profile/?user_id=${uid}`);
+        setPhoto(response.data.profile_photo);
+        setEmail(response.data.email);
+        setName(response.data.name);
+        setPhone(response.data.phone_number);
+        setLocation(response.data.bio);
+      } catch (error) {
+        // error handling;
+      }
     }
-  }
-  getProfile();
+    getProfile();
   }, []);
 
   const handleSubmit = async (e) => {
-  const uid = localStorage.getItem("user_id");
+    const uid = localStorage.getItem("user_id");
 
     e.preventDefault();
     try {
@@ -48,9 +47,7 @@ const MyProfile = () => {
       }
       const response = await Api.postFormdata(`api/profile/`, formData);
       toast.success("Profile Updated successfully");
-      console.log("Profile updated:", response.data);
     } catch (error) {
-      console.log("Error updating profile:", error.response.data);
       toast.error("Issue while updateing profile");
     }
   };
@@ -61,9 +58,9 @@ const MyProfile = () => {
   };
 
   return (
-    
-    <div style={{display:"flex", justifyContent:"center", marginTop:50, marginBottom:50,}}>
-       <ToastContainer />
+
+    <div style={{ display: "flex", justifyContent: "center", marginBottom: 50, }}>
+      <ToastContainer />
       <div
         className="py-5 overflow-hidden "
         style={{
@@ -72,10 +69,11 @@ const MyProfile = () => {
           backgroundColor: "#FFF",
           borderRadius: "8px",
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-          alignSelf:"center"
+          alignSelf: "center",
+          border: "1px solid #bda7a7",
         }}
       >
-       
+
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: "20px" }}>
             <label style={{ fontWeight: "bold", color: "#F17228" }}>
@@ -155,21 +153,24 @@ const MyProfile = () => {
               onChange={handleProfilePicChange}
             />
           </div>
-          <button
-            type="submit"
-            style={{
-              backgroundColor: "#F17228",
-              color: "#fff",
-              padding: "10px 20px",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              fontSize: "16px",
-              transition: "background-color 0.3s ease",
-            }}
-          >
-            Save
-          </button>
+          <div style={{ textAlign: "center" }}>
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#F17228",
+                color: "#fff",
+                padding: "10px 20px",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "16px",
+                transition: "background-color 0.3s ease",
+                textAlign: "center"
+              }}
+            >
+              Save
+            </button>
+          </div>
         </form>
       </div>
     </div>
