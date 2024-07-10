@@ -11,7 +11,7 @@ function Home1() {
   return (
     <div>
       <main className="main" id="top">
-        <Navbar refreshCart={refrest} />
+        <Navbar />
         <ParentComponent refRestCart={refRestCart} page='Home1' />
        <Footer/>
       </main>

@@ -214,7 +214,7 @@ function Privacy() {
           In accordance with Information Technology Act 2000 and rules made
           thereunder, the name and contact details of the Grievance Officer are
           provided below: FROZENWALA (Sarfaraz) ruby tower jogeshwari west
-          Phone: 8268888826 Email: frozenwalaenterprises@gmail.com Time: Mon to
+          Phone: 8268888826 Email: megasfrozengoods@gmail.com Time: Mon to
           Fri (9AM to 6PM)
         </p>
         <h4>Questions?</h4>

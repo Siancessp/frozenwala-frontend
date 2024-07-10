@@ -3,7 +3,7 @@ import Menu from './Menu';
 import Product from './Product';
 import Popular from './Popular';
 
-function ParentComponent({refRestCart, page}) {
+function ParentComponent({page}) {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
   const handleCategorySelect = (categoryId) => {
@@ -12,7 +12,7 @@ function ParentComponent({refRestCart, page}) {
 
   return (
     <div>
-      {page === 'Home' ? <Popular refreshCart={refRestCart}/> : null}
+      {page === 'Home' ? <Popular/> : null}
       <Menu onSelectCategory={handleCategorySelect} />
       <Product categoryId={selectedCategoryId}/>
     </div>

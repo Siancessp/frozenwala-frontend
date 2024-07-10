@@ -20,6 +20,7 @@ function Offers() {
   }, []);
 
   return (
+    getProduct.length > 0 &&
     <div>
       <section className="py-0">
         <div className="container">

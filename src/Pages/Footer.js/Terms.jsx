@@ -529,7 +529,7 @@ function Terms() {
         <h4>Contact Us</h4>
         <p>
           Don't hesitate to contact us if you have any questions. Via Email:
-          frozenwalaenterprises@gmail.com Via Phone Number: 8268888826
+          megasfrozengoods@gmail.com Via Phone Number: 8268888826
         </p>
       </div>
       <Footer/>

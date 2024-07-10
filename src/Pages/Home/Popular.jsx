@@ -3,7 +3,7 @@ import Api, { BASE_URL } from "../Utills/Api";
 import axios from "axios";
 import { MyContext } from "../Utills/MyContext";
 
-function Popular({ refreshCart }) {
+function Popular() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [popularProds, setPopularProds] = useState([]);
   const [stock, setStock] = useState({});
@@ -148,8 +148,8 @@ function Popular({ refreshCart }) {
       <section className="py-4 overflow-hidden">
         <div className="container">
           <div className="row h-100">
-            <div className="col-lg-7 mx-auto text-center mt-7 mb-5">
-              <h5 className="fw-bold fs-3 fs-lg-5 lh-sm">Popular items</h5>
+            <div className="col-lg-7 mx-auto text-center mt-2 mb-5">
+              <h5 className="fw-bold fs-3 fs-lg-5 lh-sm text-danger">Popular items</h5>
             </div>
             <div className="col-12">
               <div className="carousel slide" id="carouselPopularItems">

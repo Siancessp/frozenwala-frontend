@@ -47,7 +47,7 @@ function Login() {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
-        backgroundColor: "#FFB30E",
+        backgroundColor: "rgb(40 56 84)",
         padding: "10px",
       }}
     >
@@ -58,7 +58,7 @@ function Login() {
         <div className="container">
           <a
             className="navbar-brand d-inline-flex"
-            onClick={() => navigate("/home")}
+            onClick={() => navigate("/")}
             style={{alignItems: 'center', cursor: 'pointer'}}
           >
             <img
@@ -110,7 +110,7 @@ function Login() {
             padding: "10px",
             borderRadius: "5px",
             border: "none",
-            backgroundColor: "#F17228",
+            backgroundColor: "rgb(40 56 84)",
             color: "white",
             cursor: "pointer",
             marginTop: "20px",

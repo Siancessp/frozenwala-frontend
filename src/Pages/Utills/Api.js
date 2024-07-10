@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-export const BASE_URL = 'https://app.frozenwala.com/base/';
+// export const BASE_URL = 'https://app.frozenwala.com/base/';
+export const BASE_URL = 'http://192.168.1.47:8000/base/';
 
 const get = async endPoints => {
   const accessToken = localStorage.getItem('access_token');

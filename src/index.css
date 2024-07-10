@@ -12,6 +12,47 @@ code {
     monospace;
 }
 
+.text-gradient {
+  background: linear-gradient(50deg, rgb(40 56 84), rgb(40 56 84))!important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+button.btn.new-blue{
+  color:rgb(40 56 84);
+  padding: 10px;
+}
+button.btn.new-whatsapp{
+color:rgb(76, 175, 80);
+padding:10px;
+font-size:24px;
+}
+
+.font-new{
+  font-size:28px !important;
+}
+
+.bg-primary-one {
+  background: rgb(40 56 84) !important;
+}
+.text-800-1 {
+  color: #e5cdcd !important;
+}
+.btn-primary,.btn-danger {
+  color: #616161;
+  background-color: rgb(40 56 84) !important;
+  border-color: rgb(40 56 84) !important;
+}
+.btn-primary:hover ,.btn-danger:hover{
+  color: #616161;
+  background-color: #FFB30E!important;
+  border-color: #FFB30E !important;
+}
+.nav-tabs .nav-link.active {
+  color: rgb(40 56 84) !important;
+  background-color: rgba(241, 114, 40, 0.15);
+  border-color: transparent;
+}
+
 .pagination {
   display: flex;
   justify-content: center;
@@ -78,7 +119,22 @@ h5.text-truncate {
 .checkout-input::placeholder {
   color: rgba(0, 0, 0, 0.25)!important;
   opacity: 1;
-} 
+}
+
+input:focus {
+  box-shadow: none!important;
+}
+button:focus {
+  box-shadow: none!important;
+}
+
+.image-border{
+  border-radius:20px;
+}
+
+.nav-link {
+  cursor: pointer;
+}
 
 @media (max-width: 768px) {
   .corsosel-new {
@@ -89,4 +145,8 @@ h5.text-truncate {
     display: flex;
     flex-direction: column;
   }  
+
+  .font-new{
+    font-size:16px !important;
+  }
 }

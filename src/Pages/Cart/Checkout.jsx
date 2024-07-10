@@ -148,7 +148,7 @@ const CheckoutPage = () => {
               razorpay_signature: response.razorpay_signature,
             };
             const verify = await Api.post("api/verify_payment/", bodyData);
-            navigate("/home");
+            navigate("/");
           },
           theme: { color: "#F37254" },
         };
@@ -204,7 +204,7 @@ const CheckoutPage = () => {
               };
               const verify = await Api.post('api/verify_payment/', bodyData);
 
-                navigate("/home");
+                navigate("/");
 
           },
             theme: { color: '#F37254' },

@@ -54,7 +54,7 @@ function Menu({ onSelectCategory }) {
     <section className="py-0" style={{ flexDirection: "row", display: "flex" }}>
       <div className="container" style={{ maxWidth: "90px !important" }}>
         <div className="col-lg-7 mx-auto text-center mt-7 mb-5">
-          <h5 className="fw-bold fs-3 fs-lg-5 lh-sm">Products</h5>
+          <h5 className="fw-bold fs-3 fs-lg-5 lh-sm text-danger">Products</h5>
         </div>
         {error && <p>{error}</p>}
         <button

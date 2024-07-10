@@ -14,33 +14,21 @@ import Special from "./Home/Special";
 
 
 function Home() {
-  const navigate = useNavigate();
-
-  const [activeTab, setActiveTab] = useState("Delivery");
-  const [refrest, setRefresh] = useState(true)
-
-  const refRestCart = () =>setRefresh(!refrest)
-
-  const handleTabClick = (tabName) => {
-    setActiveTab(tabName);
-  };
-
- 
-
   const uid = localStorage.getItem("user_id");
   const access = localStorage.getItem("access_token");
+
   return (
     <div>
       <main className="main" id="top">
-        <Navbar refreshCart={refrest} />
+        <Navbar />
         
-        <section className="py-5 overflow-hidden bg-primary" id="home">
+        <section className="py-5 overflow-hidden bg-primary-one" id="home">
           <div className="container">
             <div className="row flex-center">
               <div className="col-md-5 col-lg-6 order-0 order-md-1 mt-8 mt-md-0">
-                <a className="img-landing-banner" href="#!">
+                <a href="#!">
                   <img
-                    className="img-fluid"
+                    className="img-fluid image-border"
                     src="/img/gallery/foo.jpeg"
                     alt="hero-header"
                   />
@@ -50,7 +38,7 @@ function Home() {
                 <h1 className="display-1 fs-md-5 fs-lg-6 fs-xl-8 text-light">
                   Are you starving?
                 </h1>
-                <h1 className="text-800 mb-5 fs-4">
+                <h1 className="text-800-1 mb-5 fs-4">
                   Within a few clicks, find meals that
                   <br className="d-none d-xxl-block" />
                   are accessible near you
@@ -59,18 +47,11 @@ function Home() {
             </div>
           </div>
         </section>
-
-        <Offers />
-
-       
-
-      <ParentComponent refRestCart={refRestCart} page='Home' />
+      <Offers />
+      <ParentComponent page='Home' />
       <How />
-       {/* <SearchByFood/> */}
-        <Adv/>
-
+      <Adv/>
        <Special/>
-       
         <section className="py-0">
           <div
             className="bg-holder"
