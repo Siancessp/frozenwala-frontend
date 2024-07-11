@@ -58,7 +58,7 @@ function Navbar() {
     setMenuOpen(false);
   };
 
-  const navigateMenu = (page)=>{
+  const navigateMenu = (page) => {
     window.location.href = `menu?foodtype=${page}`;
   };
 
@@ -66,7 +66,7 @@ function Navbar() {
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top d-lg-block d-none">
         <div className="container">
-          <a className="navbar-brand d-inline-flex align-items-center" style={{cursor: 'pointer'}} onClick={() => navigate("/")}>
+          <a className="navbar-brand d-inline-flex align-items-center" style={{ cursor: 'pointer' }} onClick={() => navigate("/")}>
             <img className="d-inline-block" style={{ height: "50px" }} src="/img/gallery/Frozenwala.png" alt="logo" />
             <span className="text-1000 fs-3 fw-bold ms-2 text-gradient">Frozenwala</span>
           </a>
@@ -82,7 +82,7 @@ function Navbar() {
               </li>
               <li className="nav-item dropdown" onMouseEnter={toggleMenu} onMouseLeave={closeMenu}>
                 <a className="nav-link dropdown-toggle" onClick={toggleMenu}>
-                  Menu 
+                  Menu
                 </a>
               </li>
               <li className="nav-item">
@@ -118,6 +118,64 @@ function Navbar() {
               </button>
             </form>
           </div>
+        </div>
+      </nav>
+
+      {/* for mobile view */}
+      <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top d-lg-none d-block">
+        <div className="container">
+          <a className="navbar-brand d-inline-flex align-items-center d-none" onClick={() => navigate("/home")}>
+            <img className="d-inline-block" style={{ height: "50px" }} src="/img/gallery/Frozenwala.png" alt="logo" />
+            <span className="text-1000 fs-3 fw-bold ms-2 text-gradient">Frozenwala</span>
+          </a>
+          <button className="navbar-toggler" type="button" onClick={toggleNavbar}>
+            {navbarOpen ? <FaTimes /> : <FaBars />}
+          </button>
+          <div className={`collapse navbar-collapse ${navbarOpen ? 'show' : ''}`}>
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <a className="nav-link" onClick={() => navigate("/")}>
+                  Home
+                </a>
+              </li>
+              <li className="nav-item dropdown" onMouseEnter={toggleMenu} onMouseLeave={closeMenu}>
+                <a className="nav-link dropdown-toggle" onClick={toggleMenu}>
+                  Menu
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" onClick={() => navigateMenu('veg')}>
+                  Veg
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" onClick={() => navigateMenu('nonveg')}>
+                  Non-Veg
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" onClick={() => navigate("/about")}>
+                  About Us
+                </a>
+              </li>
+            </ul>
+          </div>
+          <form className={`d-flex ms-auto align-items-center ${navbarOpen ? 'd-none' : 'd-lg-flex'}`}>
+            <button className="btn btn-white new-blue me-2" type="button" onClick={() => navigate("/search")}>
+              <FaSearch fontSize="24px" />
+            </button>
+            <button className="btn btn-white new-blue me-2" type="button" onClick={() => window.location.href = "https://wa.me/YOUR_WHATSAPP_NUMBER"}>
+              <FaWhatsapp fontSize="24px" />
+            </button>
+            <button className="btn btn-white new-blue " type="button" onClick={handleClickCart}>
+              <FaShoppingCart fontSize="24px" />
+              <span className="ms-1">{cartGlobalItems.length}</span>
+            </button>
+            <button className="btn btn-white  new-blue me-2" type="button" onClick={handleClick}>
+              <FaUser className="me-2" />
+              <span style={{ color: isLoggedIn ? '#66ff33' : '' }}>{isLoggedIn ? `Hi, ${name}` : 'Login'}</span>
+            </button>
+          </form>
         </div>
       </nav>
     </>
