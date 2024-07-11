@@ -1,18 +1,17 @@
+// Import statements and other code above...
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import Api from '../Utills/Api';
 import { MyContext } from '../Utills/MyContext';
-import { FaShoppingCart, FaUser, FaSearch, FaWhatsapp, FaBars, FaTimes, FaChevronDown, FaHome, FaInfoCircle, FaList } from "react-icons/fa";
-
-
+import { FaShoppingCart, FaUser, FaSearch, FaWhatsapp, FaBars, FaTimes } from "react-icons/fa";
 function Navbar() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [navbarOpen, setNavbarOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { cartGlobalItems } = useContext(MyContext);
-  const [menuOpen, setMenuOpen] = useState(false); // Add this line
   const [name, setName] = useState("");
-
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     const getProfile = async () => {
@@ -22,12 +21,11 @@ function Navbar() {
         const response = await Api.get(`api/profile/?user_id=${uid}`);
         setName(response.data.name);
       } catch (error) {
-        // error handling
+        // Handle error
       }
     }
     getProfile();
   }, []);
-
 
   useEffect(() => {
     const userId = localStorage.getItem('user_id');
@@ -59,7 +57,14 @@ function Navbar() {
   };
 
   const navigateMenu = (page) => {
-    window.location.href = `menu?foodtype=${page}`;
+    // Replace with appropriate navigation logic
+    // For example:
+    // navigate(`/menu?foodtype=${page}`);
+    window.location.href = `/menu?foodtype=${page}`;
+  };
+
+  const toggleSearch = () => {
+    setSearchOpen(!searchOpen);
   };
 
   return (
@@ -84,6 +89,20 @@ function Navbar() {
                 <a className="nav-link dropdown-toggle" onClick={toggleMenu}>
                   Menu
                 </a>
+                {menuOpen && (
+                  <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a className="dropdown-item" href="#" onClick={() => navigateMenu('category1')}>
+                      Category 1
+                    </a>
+                    <a className="dropdown-item" href="#" onClick={() => navigateMenu('category2')}>
+                      Category 2
+                    </a>
+                    <a className="dropdown-item" href="#" onClick={() => navigateMenu('category3')}>
+                      Category 3
+                    </a>
+                    {/* Add more categories as needed */}
+                  </div>
+                )}
               </li>
               <li className="nav-item">
                 <a className="nav-link" onClick={() => navigateMenu('veg')}>
@@ -102,15 +121,27 @@ function Navbar() {
               </li>
             </ul>
             <form className="d-flex ms-auto align-items-center">
-              <button className="btn btn-white new-blue me-2" type="button" >
+              {searchOpen && (
+                <input
+                  type="text"
+                  className="form-control me-2"
+                  placeholder="Search..."
+                  autoFocus
+                />
+              )}
+              <button className="btn btn-white new-blue me-2" type="button" onClick={toggleSearch}>
                 <FaSearch fontSize="24px" />
               </button>
-              <button className="btn btn-white new-blue me-2" type="button" onClick={() => window.location.href = "https://wa.me/YOUR_WHATSAPP_NUMBER"}>
+              <button className="btn btn-white new-blue icon-whatsapp me-2" type="button" onClick={() => window.location.href = "https://wa.me/YOUR_WHATSAPP_NUMBER"}>
                 <FaWhatsapp fontSize="24px" />
               </button>
-              <button className="btn btn-white new-blue " type="button" onClick={handleClickCart}>
+              <button className="btn btn-white new-blue position-relative me-2" type="button" onClick={handleClickCart}>
                 <FaShoppingCart fontSize="24px" />
-                <span className="ms-1">{cartGlobalItems.length}</span>
+                {cartGlobalItems.length > 0 && (
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {cartGlobalItems.length}
+                  </span>
+                )}
               </button>
               <button className="btn btn-white new-blue me-2" type="button" onClick={handleClick}>
                 <FaUser className="me-2" />
@@ -121,7 +152,7 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* for mobile view */}
+      {/* For mobile view */}
       <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top d-lg-none d-block">
         <div className="container">
           <a className="navbar-brand d-inline-flex align-items-center d-none" onClick={() => navigate("/home")}>
@@ -132,16 +163,30 @@ function Navbar() {
             {navbarOpen ? <FaTimes /> : <FaBars />}
           </button>
           <div className={`collapse navbar-collapse ${navbarOpen ? 'show' : ''}`}>
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <a className="nav-link" onClick={() => navigate("/")}>
                   Home
                 </a>
               </li>
-              <li className="nav-item dropdown" onMouseEnter={toggleMenu} onMouseLeave={closeMenu}>
-                <a className="nav-link dropdown-toggle" onClick={toggleMenu}>
+              <li className="nav-item dropdown" onClick={toggleMenu}>
+                <a className="nav-link dropdown-toggle">
                   Menu
                 </a>
+                {menuOpen && (
+                  <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a className="dropdown-item" href="#" onClick={() => navigateMenu('category1')}>
+                      Category 1
+                    </a>
+                    <a className="dropdown-item" href="#" onClick={() => navigateMenu('category2')}>
+                      Category 2
+                    </a>
+                    <a className="dropdown-item" href="#" onClick={() => navigateMenu('category3')}>
+                      Category 3
+                    </a>
+                    {/* Add more categories as needed */}
+                  </div>
+                )}
               </li>
               <li className="nav-item">
                 <a className="nav-link" onClick={() => navigateMenu('veg')}>
@@ -159,27 +204,40 @@ function Navbar() {
                 </a>
               </li>
             </ul>
+        
           </div>
-          <form className={`d-flex ms-auto align-items-center ${navbarOpen ? 'd-none' : 'd-lg-flex'}`}>
-            <button className="btn btn-white new-blue me-2" type="button" onClick={() => navigate("/search")}>
-              <FaSearch fontSize="24px" />
-            </button>
-            <button className="btn btn-white new-blue me-2" type="button" onClick={() => window.location.href = "https://wa.me/YOUR_WHATSAPP_NUMBER"}>
-              <FaWhatsapp fontSize="24px" />
-            </button>
-            <button className="btn btn-white new-blue " type="button" onClick={handleClickCart}>
-              <FaShoppingCart fontSize="24px" />
-              <span className="ms-1">{cartGlobalItems.length}</span>
-            </button>
-            <button className="btn btn-white  new-blue me-2" type="button" onClick={handleClick}>
-              <FaUser className="me-2" />
-              <span style={{ color: isLoggedIn ? '#66ff33' : '' }}>{isLoggedIn ? `Hi, ${name}` : 'Login'}</span>
-            </button>
-          </form>
+          <form className="d-flex ms-auto align-items-center">
+              {searchOpen && (
+                <input
+                  type="text"
+                  className="form-control me-2"
+                  placeholder="Search..."
+                  autoFocus
+                />
+              )}
+              <button className="btn btn-white new-blue me-2" type="button" onClick={toggleSearch}>
+                <FaSearch fontSize="24px" />
+              </button>
+              <button className="btn btn-white new-blue icon-whatsapp me-2" type="button" onClick={() => window.location.href = "https://wa.me/YOUR_WHATSAPP_NUMBER"}>
+                <FaWhatsapp fontSize="24px" />
+              </button>
+              <button className="btn btn-white new-blue position-relative me-2" type="button" onClick={handleClickCart}>
+                <FaShoppingCart fontSize="24px" />
+                {cartGlobalItems.length > 0 && (
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {cartGlobalItems.length}
+                  </span>
+                )}
+              </button>
+              <button className="btn btn-white new-blue me-2" type="button" onClick={handleClick}>
+                <FaUser className="me-2" />
+                <span style={{ color: isLoggedIn ? 'rgb(40, 56, 84)' : '' }}>{isLoggedIn ? `Hi, ${name}` : 'Login'}</span>
+              </button>
+            </form>
         </div>
       </nav>
     </>
-  )
+  );
 }
 
 export default Navbar;

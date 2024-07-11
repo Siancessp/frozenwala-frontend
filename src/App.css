@@ -36,3 +36,6 @@
     transform: rotate(360deg);
   }
 }
+button.btn.btn-white.new-blue.icon-whatsapp {
+  color: #1fd77df5;
+}

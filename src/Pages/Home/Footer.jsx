@@ -25,7 +25,7 @@ function Footer() {
   };
   return (
     <div>
-      <section className="py-0 pt-7 bg-1000 footer-section">
+      <section className="py-0 pt-3 bg-1000 footer-section">
         <div className="container">
           <div className="row" style={{justifyContent:"space-between"}}>
             <div className="col-6 col-md-4 col-lg-3 col-xxl-2 mb-3">
