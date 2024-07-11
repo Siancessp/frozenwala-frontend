@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { MyContext } from "../Utills/MyContext";
 import Api, { BASE_URL } from './../Utills/Api';
 import axios from "axios";
@@ -19,6 +19,7 @@ const SearchItems = () => {
     const [cartError, setCartError] = useState(null);
     const [searchParams] = useSearchParams();
     const query = searchParams.get('search_query');
+    const location = useLocation();
 
     const getProducts = async()=>{
         try {
@@ -40,7 +41,7 @@ const SearchItems = () => {
 
         return () => {
           };
-    }, []);
+    }, [location.search]);
 
     useEffect(() => {
         let pages = Math.ceil(allProducts.length / pagedata);

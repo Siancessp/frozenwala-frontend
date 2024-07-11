@@ -21,6 +21,7 @@ function FoodMenu() {
     const [searchParams] = useSearchParams();
     const location = useLocation();
     const foodType = searchParams.get('foodtype');
+    const [loading, setLoading] = useState(false);
 
 
     useEffect(() => {
@@ -33,7 +34,7 @@ function FoodMenu() {
             setCartGlobalItems(cart);
         }
         return () => {
-          };
+        };
     }, [location.search]);
 
     useEffect(() => {
@@ -44,6 +45,7 @@ function FoodMenu() {
 
     const getAllProducts = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(
                 `${BASE_URL}api/auth/product-all/`
             );
@@ -59,9 +61,12 @@ function FoodMenu() {
                 }
             });
             setAllProducts(products);
-            localStorage.setItem('deliveryCharges', deliveryCharges[0]?.DeliveryChange ? deliveryCharges[0]?.DeliveryChange : 0); 
+            localStorage.setItem('deliveryCharges', deliveryCharges[0]?.DeliveryChange ? deliveryCharges[0]?.DeliveryChange : 0);
         } catch (error) {
             // error handling
+        }
+        finally{
+            setLoading(false);
         }
     };
 
@@ -148,195 +153,202 @@ function FoodMenu() {
 
     return (
         <>
-        <div>
-            <Navbar/>
-            <section id="testimonial">
-                {products.length > 0 ? <div className="container">
-                    <div className="row gx-2">
-                        {products.map((product) => (
-                            <div
-                                key={product?.id}
-                                className="col-6 col-sm-6 col-md-6 col-lg-3 mb-5"
-                            >
-                                <div style={{ width: "90%" }}>
-                                    <div style={{ position: "relative", width: "100%" }}>
-                                        <img
-                                            style={{
-                                                aspectRatio: 1,
-                                                width: "100%",
-                                                borderRadius: 20,
-                                            }}
-                                            src={product.item_photo ? `https://app.frozenwala.com/${product.item_photo}` : './../../../img/food.png'}
-                                            alt={product.title}
-                                        />
-                                        {product.stock === 0 && (
-                                            <img
-                                                src="https://png.pngtree.com/png-clipart/20190401/ourlarge/pngtree-sold-out-png-image_859393.jpg"
-                                                style={{
-                                                    position: "absolute",
-                                                    top: 0,
-                                                    left: 0,
-                                                    width: "100%",
-                                                    height: "100%",
-                                                    borderRadius: 20,
-                                                }}
-                                                alt="Sold Out"
-                                            />
-                                        )}
-                                        <div
-                                            className="badge bg-danger p-2"
-                                            style={{ position: "absolute", top: 10, left: 10 }}
-                                        >
-                                            <i className="fas fa-tag me-2 fs-0"></i>
-                                            <span className="fs-0">{product.discount}% off</span>
-                                        </div>
-                                        {product.most_popular && (
-                                            <div
-                                                className="badge bg-soft-success p-2"
-                                                style={{ position: "absolute", bottom: 10, left: 10 }}
-                                            >
-                                                <span className="fw-bold fs-1 text-success">
-                                                    Most Popular
-                                                </span>
+            <div>
+                <Navbar />
+                <section id="testimonial">
+                    {
+                        !loading ? (products.length > 0 ? <div className="container">
+                            <div className="row gx-2">
+                                {products.map((product) => (
+                                    <div
+                                        key={product?.id}
+                                        className="col-6 col-sm-6 col-md-6 col-lg-3 mb-5"
+                                    >
+                                        <div style={{ width: "90%" }}>
+                                            <div style={{ position: "relative", width: "100%" }}>
+                                                <img
+                                                    style={{
+                                                        aspectRatio: 1,
+                                                        width: "100%",
+                                                        borderRadius: 20,
+                                                    }}
+                                                    src={product.item_photo ? `https://app.frozenwala.com/${product.item_photo}` : './../../../img/food.png'}
+                                                    alt={product.title}
+                                                />
+                                                {product.stock === 0 && (
+                                                    <img
+                                                        src="https://png.pngtree.com/png-clipart/20190401/ourlarge/pngtree-sold-out-png-image_859393.jpg"
+                                                        style={{
+                                                            position: "absolute",
+                                                            top: 0,
+                                                            left: 0,
+                                                            width: "100%",
+                                                            height: "100%",
+                                                            borderRadius: 20,
+                                                        }}
+                                                        alt="Sold Out"
+                                                    />
+                                                )}
+                                                <div
+                                                    className="badge bg-danger p-2"
+                                                    style={{ position: "absolute", top: 10, left: 10 }}
+                                                >
+                                                    <i className="fas fa-tag me-2 fs-0"></i>
+                                                    <span className="fs-0">{product.discount}% off</span>
+                                                </div>
+                                                {product.most_popular && (
+                                                    <div
+                                                        className="badge bg-soft-success p-2"
+                                                        style={{ position: "absolute", bottom: 10, left: 10 }}
+                                                    >
+                                                        <span className="fw-bold fs-1 text-success">
+                                                            Most Popular
+                                                        </span>
+                                                    </div>
+                                                )}
                                             </div>
-                                        )}
-                                    </div>
 
-                                    <div className="card-body card-new">
-                                        <div className="d-flex align-items-center mb-3">
-                                            <div className="flex-1 ms-3 text-center">
-                                                <h5
-                                                    className="mb-0 fw-bold text-1000"
-                                                    style={{
-                                                        lineHeight: "1.5em",
-                                                        height: "3em",
-                                                        overflow: "hidden",
-                                                    }}
-                                                >
-                                                    {product.title}
-                                                </h5>
-                                                <span
-                                                    className="mb-0 "
-                                                    style={{
-                                                        fontSize: 18,
-                                                        fontWeight: "700",
-                                                        color: "#79B93C",
-                                                    }}
-                                                >
-                                                    ₹{product.item_new_price}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        {cartError === product.id ? <p className="text-center" style={{ color: 'red', margin: 0 }}>Out of stock</p> : null}
-                                        <div className="text-center" style={{
-                                            alignItems: "center", display: "flex", justifyContent: "center",
-                                        }}>
-                                            {product.stock === 0 ? (
-                                                <button
-                                                    className="badge bg-soft-success p-2"
-                                                    style={{ borderWidth: 0, cursor: "not-allowed", alignItems: "center", justifyContent: "space-between", display: "flex" }}
-                                                    type="button"
-                                                    disabled
-                                                >
-                                                    <span className="fw-bold fs-1 text-success">
-                                                        Sold Out
-                                                    </span>
-                                                </button>
-                                            ) : (
-                                                <>
-                                                    {cartGlobalItems.length > 0 && cartGlobalItems?.filter(prod => prod?.product_id === product?.id)[0] ? (
-                                                        <div
-                                                            className="badge bg-soft-success p-2"
-                                                            style={{ alignItems: "center", justifyContent: "space-between", display: "flex" }}
+                                            <div className="card-body card-new">
+                                                <div className="d-flex align-items-center mb-3">
+                                                    <div className="flex-1 ms-3 text-center">
+                                                        <h5
+                                                            className="mb-0 fw-bold text-1000"
+                                                            style={{
+                                                                lineHeight: "1.5em",
+                                                                height: "3em",
+                                                                overflow: "hidden",
+                                                            }}
                                                         >
-                                                            <button
-                                                                onClick={() => updateCartItems(product?.id, 'minus')}
-                                                                style={{
-                                                                    borderWidth: 0,
-                                                                    fontSize: 24,
-                                                                    backgroundColor: "transparent",
-                                                                }}
-                                                            >
-                                                                -
-                                                            </button>
-                                                            <span style={{ color: "black", fontSize: 18 }}>
-                                                                {cartGlobalItems.length > 0 && cartGlobalItems?.filter(prod => prod?.product_id === product?.id)[0]?.quantity}
-                                                            </span>
-                                                            <button
-                                                                onClick={() => updateCartItems(product?.id, 'add')}
-                                                                style={{
-                                                                    borderWidth: 0,
-                                                                    fontSize: 24,
-                                                                    backgroundColor: "transparent",
-                                                                }}
-                                                            >
-                                                                +
-                                                            </button>
-                                                        </div>
-                                                    ) : (
+                                                            {product.title}
+                                                        </h5>
+                                                        <span
+                                                            className="mb-0 "
+                                                            style={{
+                                                                fontSize: 18,
+                                                                fontWeight: "700",
+                                                                color: "#79B93C",
+                                                            }}
+                                                        >
+                                                            ₹{product.item_new_price}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                {cartError === product.id ? <p className="text-center" style={{ color: 'red', margin: 0 }}>Out of stock</p> : null}
+                                                <div className="text-center" style={{
+                                                    alignItems: "center", display: "flex", justifyContent: "center",
+                                                }}>
+                                                    {product.stock === 0 ? (
                                                         <button
                                                             className="badge bg-soft-success p-2"
-                                                            style={{ borderWidth: 0 }}
+                                                            style={{ borderWidth: 0, cursor: "not-allowed", alignItems: "center", justifyContent: "space-between", display: "flex" }}
                                                             type="button"
-                                                            onClick={() => updateCartItems(product.id, 'add')}
+                                                            disabled
                                                         >
-                                                            <span className="fw-bold fs-1 text-success ">
-                                                                + Add to cart
+                                                            <span className="fw-bold fs-1 text-success">
+                                                                Sold Out
                                                             </span>
                                                         </button>
+                                                    ) : (
+                                                        <>
+                                                            {cartGlobalItems.length > 0 && cartGlobalItems?.filter(prod => prod?.product_id === product?.id)[0] ? (
+                                                                <div
+                                                                    className="badge bg-soft-success p-2"
+                                                                    style={{ alignItems: "center", justifyContent: "space-between", display: "flex" }}
+                                                                >
+                                                                    <button
+                                                                        onClick={() => updateCartItems(product?.id, 'minus')}
+                                                                        style={{
+                                                                            borderWidth: 0,
+                                                                            fontSize: 24,
+                                                                            backgroundColor: "transparent",
+                                                                        }}
+                                                                    >
+                                                                        -
+                                                                    </button>
+                                                                    <span style={{ color: "black", fontSize: 18 }}>
+                                                                        {cartGlobalItems.length > 0 && cartGlobalItems?.filter(prod => prod?.product_id === product?.id)[0]?.quantity}
+                                                                    </span>
+                                                                    <button
+                                                                        onClick={() => updateCartItems(product?.id, 'add')}
+                                                                        style={{
+                                                                            borderWidth: 0,
+                                                                            fontSize: 24,
+                                                                            backgroundColor: "transparent",
+                                                                        }}
+                                                                    >
+                                                                        +
+                                                                    </button>
+                                                                </div>
+                                                            ) : (
+                                                                <button
+                                                                    className="badge bg-soft-success p-2"
+                                                                    style={{ borderWidth: 0 }}
+                                                                    type="button"
+                                                                    onClick={() => updateCartItems(product.id, 'add')}
+                                                                >
+                                                                    <span className="fw-bold fs-1 text-success ">
+                                                                        + Add to cart
+                                                                    </span>
+                                                                </button>
+                                                            )}
+                                                        </>
                                                     )}
-                                                </>
-                                            )}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                ))}
+                            </div>
+                            <div className="pagination">
+                                <div className="prev" style={{ backgroundColor: currentPage === 1 ? '#80808052' : 'antiquewhite' }}>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="25"
+                                        height="25"
+                                        fill="currentColor"
+                                        className="bi bi-chevron-left"
+                                        viewBox="0 0 16 16"
+                                        style={{ cursor: currentPage === 1 ? '' : 'pointer' }}
+                                        onClick={() => currentPage === 1 ? null : pageChange('prev')}
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+                                        />
+                                    </svg>
+                                </div>
+                                <div className="pages">{currentPage} / {totalPage}</div>
+                                <div className="next" style={{ backgroundColor: currentPage === totalPage ? '#80808052' : 'antiquewhite' }}>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="25"
+                                        height="25"
+                                        fill="currentColor"
+                                        className="bi bi-chevron-right"
+                                        viewBox="0 0 16 16"
+                                        style={{ cursor: currentPage === totalPage ? '' : 'pointer' }}
+                                        onClick={() => currentPage === totalPage ? null : pageChange('next')}
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+                                        />
+                                    </svg>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                    <div className="pagination">
-                        <div className="prev" style={{ backgroundColor: currentPage === 1 ? '#80808052' : 'antiquewhite' }}>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="25"
-                                height="25"
-                                fill="currentColor"
-                                className="bi bi-chevron-left"
-                                viewBox="0 0 16 16"
-                                style={{ cursor: currentPage === 1 ? '' : 'pointer' }}
-                                onClick={() => currentPage === 1 ? null : pageChange('prev')}
-                            >
-                                <path
-                                    fillRule="evenodd"
-                                    d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
-                                />
-                            </svg>
                         </div>
-                        <div className="pages">{currentPage} / {totalPage}</div>
-                        <div className="next" style={{ backgroundColor: currentPage === totalPage ? '#80808052' : 'antiquewhite' }}>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="25"
-                                height="25"
-                                fill="currentColor"
-                                className="bi bi-chevron-right"
-                                viewBox="0 0 16 16"
-                                style={{ cursor: currentPage === totalPage ? '' : 'pointer' }}
-                                onClick={() => currentPage === totalPage ? null : pageChange('next')}
-                            >
-                                <path
-                                    fillRule="evenodd"
-                                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
-                                />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                :
-                <div className="text-center" style={{fontSize: '30px'}}>No products</div>
-                }
-            </section>
-        </div>
-        <Footer/>
+                            :
+                            <div className="text-center" style={{ fontSize: '30px' }}>No products</div>)
+                            :
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden"></span>
+                                </div>
+                            </div>
+                    }
+                </section>
+            </div>
+            <Footer />
         </>
     );
 }
