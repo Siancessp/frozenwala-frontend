@@ -5,14 +5,11 @@ import Footer from "./Home/Footer";
 
 
 function Home1() {
-  const [refrest, setRefresh] = useState(true)
-  const refRestCart = () =>setRefresh(!refrest)
-
   return (
     <div>
       <main className="main" id="top">
         <Navbar />
-        <ParentComponent refRestCart={refRestCart} page='Home1' />
+        <ParentComponent page='Home1' />
        <Footer/>
       </main>
     </div>

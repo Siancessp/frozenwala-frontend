@@ -136,6 +136,10 @@ button:focus {
   cursor: pointer;
 }
 
+.dropdown-item.active, .dropdown-item:active {
+  background-color: rgb(40, 56, 84)!important;
+}
+
 @media (max-width: 768px) {
   .corsosel-new {
     max-width: 70% !important;

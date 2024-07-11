@@ -32,7 +32,7 @@ function Menu({ onSelectCategory }) {
     setSelectedCategory(categoryId);
     if (categoryId === "all") {
       try {
-        const response = await Api.get(`api/product-all/`);
+        const response = await axios.get(`${BASE_URL}api/auth/product-all/`);
         onSelectCategory("all", response.data);
       } catch (error) {
         setError("Error fetching items. Please try again later.");

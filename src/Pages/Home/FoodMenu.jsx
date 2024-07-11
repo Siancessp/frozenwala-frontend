@@ -5,6 +5,7 @@ import { MyContext } from "../Utills/MyContext";
 import { BASE_URL } from './../Utills/Api';
 import { useSearchParams } from 'react-router-dom';
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 
 function FoodMenu() {
@@ -51,7 +52,7 @@ function FoodMenu() {
                 } else if (foodType === 'nonveg') {
                     return prod.non_veg;
                 } else {
-                    return true;
+                    return false;
                 }
             });
             setAllProducts(products);
@@ -143,6 +144,7 @@ function FoodMenu() {
     }
 
     return (
+        <>
         <div>
             <Navbar/>
             <section id="testimonial">
@@ -331,6 +333,8 @@ function FoodMenu() {
                 }
             </section>
         </div>
+        <Footer/>
+        </>
     );
 }
 
