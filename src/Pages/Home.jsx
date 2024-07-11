@@ -1,13 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Offers from "./Home/Offers";
 import How from "./Home/How";
-import Popular from "./Home/Popular";
-import Menu from "./Home/Menu";
 import Navbar from "./Home/Navbar";
-import Product from "./Home/Product";
 import ParentComponent from "./Home/Parent";
-import SearchByFood from "./Home/SearchByFood";
 import Adv from "./Home/Adv";
 import Footer from "./Home/Footer";
 import Special from "./Home/Special";
@@ -21,7 +16,6 @@ function Home() {
     <div>
       <main className="main" id="top">
         <Navbar />
-        
         <section className="py-5 overflow-hidden bg-primary-one" id="home">
           <div className="container">
             <div className="row flex-center">

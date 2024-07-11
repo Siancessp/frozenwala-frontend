@@ -16,8 +16,9 @@ import Terms from "./Pages/Footer.js/Terms";
 import Privacy from "./Pages/Footer.js/Privacy";
 import Refund from "./Pages/Footer.js/Refund";
 import AboutUs from "./Pages/Footer.js/AboutUs";
-
 import FoodMenu from "./Pages/Home/FoodMenu";
+import SearchItems from "./Pages/Home/SearchItems";
+
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -43,6 +44,7 @@ function App() {
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/refund" element={<Refund />} />
       <Route path="/about" element={<AboutUs />} />
+      <Route path="/search" element={<SearchItems />} />
       <Route path="*" element={<Navigate to="/" />} />
       <Route path="/menu" element={<Navigate to="/" />} />
       <Route path="/foodmenu" element={<Navigate to="/" />} />
@@ -62,6 +64,7 @@ function App() {
       <Route path="/about" element={<AboutUs />} />
       <Route path="/cart" element={<CartDetails />} />
       <Route path="/menu" element={<FoodMenu/>} />
+      <Route path="/search" element={<SearchItems />} />
       <Route path="/" element={<Home />} />
       <Route path="/products" element={<Home1 />} />
       <Route path="*" element={<Navigate to="/login" />} />

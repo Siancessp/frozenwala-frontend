@@ -3,7 +3,7 @@ import Api from "../Utills/Api";
 import axios from "axios";
 import { MyContext } from "../Utills/MyContext";
 import { BASE_URL } from './../Utills/Api';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
@@ -19,6 +19,7 @@ function FoodMenu() {
     const access_token = localStorage.getItem('access_token');
     const [cartError, setCartError] = useState(null);
     const [searchParams] = useSearchParams();
+    const location = useLocation();
     const foodType = searchParams.get('foodtype');
 
 
@@ -31,7 +32,9 @@ function FoodMenu() {
             const cart = JSON.parse(localStorage.getItem("cart")) || [];
             setCartGlobalItems(cart);
         }
-    }, []);
+        return () => {
+          };
+    }, [location.search]);
 
     useEffect(() => {
         let pages = Math.ceil(allProducts.length / pagedata);
