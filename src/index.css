@@ -140,6 +140,62 @@ button:focus {
   background-color: rgb(40, 56, 84)!important;
 }
 
+.menu-section {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+}
+
+.category-slider {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.arrow-button {
+  background-color: #f17228;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+}
+
+.arrow-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.category-buttons {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  overflow-x: auto;
+}
+
+.category-button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px 10px 0 0;
+  margin: 0 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.category-button:hover {
+  background-color: #e6e6e6;
+}
+
+.category-name {
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .corsosel-new {
     max-width: 70% !important;
@@ -152,5 +208,21 @@ button:focus {
 
   .font-new{
     font-size:16px !important;
+  }
+
+  .category-slider {
+    flex-direction: column;
+  }
+
+  .arrow-button {
+    margin: 10px 0;
+  }
+
+  .category-buttons {
+    flex-direction: column;
+  }
+
+  .category-button {
+    margin: 5px 0;
   }
 }

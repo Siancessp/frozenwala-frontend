@@ -59,7 +59,7 @@ function Navbar() {
   };
 
   const navigateMenu = (page)=>{
-    window.location.href = page;
+    window.location.href = `menu?foodtype=${page}`;
   };
 
   return (
@@ -77,22 +77,28 @@ function Navbar() {
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <a className="nav-link" onClick={() => navigate("/")}>
-                  <FaHome className="me-1" /> Home
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" onClick={() => navigate("/about")}>
-                  <FaInfoCircle className="me-1" /> About Us
+                  Home
                 </a>
               </li>
               <li className="nav-item dropdown" onMouseEnter={toggleMenu} onMouseLeave={closeMenu}>
                 <a className="nav-link dropdown-toggle" onClick={toggleMenu}>
-                  <FaList className="me-1" /> Menu 
+                  Menu 
                 </a>
-                <ul className={`dropdown-menu ${menuOpen ? 'show' : ''}`}>
-                  <li><a className="dropdown-item" style={{cursor: 'pointer'}} onClick={() => navigateMenu('/menu?foodtype=veg')}>Veg</a></li>
-                  <li><a className="dropdown-item" style={{cursor: 'pointer'}} onClick={() => navigateMenu('/menu?foodtype=nonveg')}>Non-Veg</a></li>
-                </ul>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" onClick={() => navigateMenu('veg')}>
+                  Veg
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" onClick={() => navigateMenu('nonveg')}>
+                  Non-Veg
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" onClick={() => navigate("/about")}>
+                  About Us
+                </a>
               </li>
             </ul>
             <form className="d-flex ms-auto align-items-center">

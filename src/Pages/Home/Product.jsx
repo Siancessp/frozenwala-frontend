@@ -49,7 +49,7 @@ function Product({ categoryId }) {
           await getAllProducts();
         } else {
           const response = await Api.get(
-            `api/auth/category/product-all/?category_id=${categoryId}`
+            `${BASE_URL}api/auth/category/product-all/?category_id=${categoryId}`
           );
           setAllProducts(response.data);
         }
