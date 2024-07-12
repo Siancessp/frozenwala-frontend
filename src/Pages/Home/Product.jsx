@@ -66,10 +66,15 @@ function Product({ categoryId }) {
           setAllProducts(response.data);
         }
       } else {
-        const response = await axios.get(
-          `${BASE_URL}api/auth/category/product-all/?category_id=${categoryId}`
-        );
-        setAllProducts(response.data);
+        if (categoryId === "all"){
+          await getAllProducts();
+        }
+        else{
+          const response = await axios.get(
+            `${BASE_URL}api/auth/category/product-all/?category_id=${categoryId}`
+          );
+          setAllProducts(response.data);
+        }
       }
     } catch (error) {
       // error handling

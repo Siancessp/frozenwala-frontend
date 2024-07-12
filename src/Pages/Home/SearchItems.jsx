@@ -123,8 +123,9 @@ const SearchItems = () => {
 
     return (
         <>
+        <div className="content-main">
             <Navbar />
-                <section id="testimonial">
+                <section id="testimonial" className="test-main">
                     {products.length > 0 ?
                     <div className="container">
                         <div className="row gx-2">
@@ -311,6 +312,7 @@ const SearchItems = () => {
                     }
                 </section>
             <Footer />
+            </div>
         </>
     )
 };
