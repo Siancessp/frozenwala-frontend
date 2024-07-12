@@ -37,11 +37,11 @@ function Terms() {
           non-transferable, limited license to download, install and use the
           website strictly in accordance with the terms of this Agreement. These
           Terms & Conditions are a contract between you and FROZENWALA
-          (Sarfaraz) (referred to in these Terms & Conditions as "FROZENWALA
-          (Sarfaraz)", "us", "we" or "our"), the provider of the FROZENWALA
-          (Sarfaraz) website and the services accessible from the FROZENWALA
-          (Sarfaraz) website (which are collectively referred to in these Terms
-          & Conditions as the "FROZENWALA (Sarfaraz) Service"). You are agreeing
+           (referred to in these Terms & Conditions as "FROZENWALA
+          ", "us", "we" or "our"), the provider of the FROZENWALA
+           website and the services accessible from the FROZENWALA
+           website (which are collectively referred to in these Terms
+          & Conditions as the "FROZENWALA  Service"). You are agreeing
           to be bound by these Terms & Conditions. If you do not agree to these
           Terms & Conditions, please do not use the FROZENWALA 
           Service. In these Terms & Conditions, "you" refers both to you as an
@@ -76,7 +76,7 @@ function Terms() {
         <h5>Country:</h5>
         <p>
           where FROZENWALA  or the owners/founders of FROZENWALA
-          (Sarfaraz) are based, in this case is India.
+           are based, in this case is India.
         </p>
 
         <h5>Device:</h5>
@@ -121,7 +121,7 @@ function Terms() {
           disassemble, decrypt, reverse compile or reverse engineer any part of
           the website. c) Remove, alter or obscure any proprietary notice
           (including any notice of copyright or trademark) of FROZENWALA
-          (Sarfaraz) or its affiliates, partners, suppliers or the licensors of
+           or its affiliates, partners, suppliers or the licensors of
           the website.
         </p>
 
@@ -138,7 +138,7 @@ function Terms() {
           payment information, you agree that FROZENWALA  is
           authorized to verify information immediately, and subsequently invoice
           your account for all fees and charges due and payable to FROZENWALA
-          (Sarfaraz) hereunder and that no additional notice or consent is
+           hereunder and that no additional notice or consent is
           required. You agree to immediately notify FROZENWALA  of any
           change in your billing address or the credit card or payment mode used
           for payment hereunder. FROZENWALA  reserves the right at any
@@ -148,7 +148,7 @@ function Terms() {
           incurred in the collection of delinquent undisputed amounts shall be
           the responsibility of and paid for by you. No contract will exist
           between you and FROZENWALA  for the Service until FROZENWALA
-          (Sarfaraz) accepts your order by a confirmatory e-mail, SMS/MMS
+           accepts your order by a confirmatory e-mail, SMS/MMS
           message, or other appropriate means of communication. You are
           responsible for any third-party fees that you may incur when using the
           Service.
@@ -522,7 +522,7 @@ function Terms() {
           affiliates, employees, officers, directors, agents, or the like will
           create a warranty. Price and availability information is subject to
           change without notice. Without limiting the foregoing, FROZENWALA
-          (Sarfaraz) does not warrant that the FROZENWALA  Service
+           does not warrant that the FROZENWALA  Service
           will be uninterrupted, uncorrupted, timely, or error-free.
         </p>
 
