@@ -50,9 +50,7 @@ const QuantityButton = ({ product, getTotalPrice, onPressAddToCart }) => {
         getQuantity();
         getTotalPrice();
         // You may replace the toast with a notification component or similar in React.js
-        alert('Quantity increased');
       } else if (stock === quantity) {
-        alert(`Only ${stock} available. You cannot add more.`);
       }
     } catch (error) {
       // error handling
@@ -69,7 +67,6 @@ const QuantityButton = ({ product, getTotalPrice, onPressAddToCart }) => {
         });
         getQuantity();
         getTotalPrice();
-        alert('Quantity decreased');
       } else if (quantity === 1) {
         await Api.post(`api/decrease/main/`, {
           product_id: id,
@@ -77,7 +74,6 @@ const QuantityButton = ({ product, getTotalPrice, onPressAddToCart }) => {
         });
         setQuantity(0);
         getTotalPrice();
-        alert('Quantity decreased');
       }
     } catch (error) {
       // error handling

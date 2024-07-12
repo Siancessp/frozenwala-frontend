@@ -3,6 +3,7 @@ import Api from "../Utills/Api";
 import axios from "axios";
 import { MyContext } from "../Utills/MyContext";
 import { BASE_URL } from './../Utills/Api';
+import { useSearchParams, useLocation } from 'react-router-dom';
 
 
 function Product({ categoryId }) {
@@ -15,10 +16,19 @@ function Product({ categoryId }) {
   const { cartGlobalItems, setCartGlobalItems } = useContext(MyContext);
   const access_token = localStorage.getItem('access_token');
   const [cartError, setCartError] = useState(null);
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const cate = searchParams.get('cate');
+  const cateId = searchParams.get('c_id');
 
 
   useEffect(() => {
-    getProducts(categoryId);
+    if (cate && cateId){
+      getProducts(cateId);
+    }
+    else{
+      getProducts(categoryId);
+    }
     if (access_token) {
       getCartItems();
     }
@@ -26,7 +36,9 @@ function Product({ categoryId }) {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
       setCartGlobalItems(cart);
     }
-  }, []);
+    return () => {
+    };
+  }, [location.search]);
 
   useEffect(() => {
     if (categoryId) {
@@ -165,7 +177,6 @@ function Product({ categoryId }) {
   }
 
   return (
-    <div>
       <section id="testimonial">
         <div className="container">
           <div className="row gx-2">
@@ -348,7 +359,6 @@ function Product({ categoryId }) {
           </div>
         </div>
       </section>
-    </div>
   );
 }
 

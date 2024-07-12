@@ -13,7 +13,7 @@ function Privacy() {
         <p>
           We take security and privacy with the utmost regard. Following is the
           information about the policies and procedures of FROZENWALA
-          (Sarfaraz). and the collection, usage, disclosure, and dissemination
+          . and the collection, usage, disclosure, and dissemination
           of information. By visiting this Website you agree to be bound by the
           terms and conditions of this Privacy Policy. If you do not agree
           please do not use or access our Wwebsite. By use of the Website, you
@@ -166,7 +166,7 @@ function Privacy() {
         <h4>Links to Other Sites</h4>
         <p>
           Our website links to other websites that may collect personally
-          identifiable information about you. FROZENWALA (Sarfaraz) is not
+          identifiable information about you. FROZENWALA  is not
           responsible for the privacy practices or the content of those linked
           websites. Access or Control your Information: You have been provided
           with tools to manage your information. You have the right to access,
@@ -213,7 +213,7 @@ function Privacy() {
         <p>
           In accordance with Information Technology Act 2000 and rules made
           thereunder, the name and contact details of the Grievance Officer are
-          provided below: FROZENWALA (Sarfaraz) ruby tower jogeshwari west
+          provided below: FROZENWALA  ruby tower jogeshwari west
           Phone: 8268888826 Email: megasfrozengoods@gmail.com Time: Mon to
           Fri (9AM to 6PM)
         </p>

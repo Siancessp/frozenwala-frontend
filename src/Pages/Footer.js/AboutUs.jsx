@@ -6,7 +6,7 @@ function AboutUs() {
   return (
     <div>
         <Navbar/>
-        <section className="py-5 overflow-hidden" id="home">
+        <section className="py-5 overflow-hidden " id="home">
    
 <div className="container mt-8" id="dish_list">
     <div className="row h-100">
@@ -14,11 +14,11 @@ function AboutUs() {
             <h5 className="fw-bold fs-3 fs-lg-5 lh-sm mb-3">About Us</h5>
         </div>
     </div>
-            <h3>FROZENWALA(SARFARAZ)</h3>
-           <h3> WHOLESALERS & DISTRIBUTORS</h3>
-            <h3>DELIVERY FROM</h3>
-            <h3>(CHURCHGATE TO MIRA ROAD)</h3>
-            <h3>*NOT FOR OUTSTATION COSTUMER V ONLY DELIVER IN MUMBAI*</h3>
+            <h4>FROZENWALA</h4>
+           <h4> WHOLESALERS & DISTRIBUTORS</h4>
+            <h4>DELIVERY FROM</h4>
+            <h4>(CHURCHGATE TO MIRA ROAD)</h4>
+            <h4>*NOT FOR OUTSTATION COSTUMER V ONLY DELIVER IN MUMBAI*</h4>
   
        
 

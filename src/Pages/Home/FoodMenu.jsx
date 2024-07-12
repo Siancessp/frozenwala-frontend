@@ -153,9 +153,9 @@ function FoodMenu() {
 
     return (
         <>
-            <div>
+            <div className="content-main" >
                 <Navbar />
-                <section id="testimonial">
+                <section id="testimonial"className="test-main" >
                     {
                         !loading ? (products.length > 0 ? <div className="container">
                             <div className="row gx-2">
@@ -340,7 +340,7 @@ function FoodMenu() {
                             :
                             <div className="text-center" style={{ fontSize: '30px' }}>No products</div>)
                             :
-                            <div class="d-flex justify-content-center">
+                            <div class="d-flex justify-content-center align-items-center">
                                 <div class="spinner-border" role="status">
                                     <span class="visually-hidden"></span>
                                 </div>

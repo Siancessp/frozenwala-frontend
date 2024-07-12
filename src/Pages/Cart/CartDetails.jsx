@@ -146,11 +146,11 @@ function CartDetails() {
   };
 
   return (
-    <div>
+    <div >
       <Navbar />
 
       <main
-        className="main"
+        className="main content-main"
         id="top"
         style={{ paddingTop: "100px", margin: 50, textAlign: "center" }}
       >

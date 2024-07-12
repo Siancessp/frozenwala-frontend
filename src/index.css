@@ -196,6 +196,34 @@ button:focus {
   font-weight: 600;
 }
 
+.menu-dropdown {
+  display: unset!important;
+  height: 200px!important;
+  text-align: center!important;
+  overflow-y: auto!important;
+  font-size:16px!important;
+}
+
+.menu-dropdown div {
+  font-size: 12px;
+}
+
+.menu-dropdown div p {
+  cursor: pointer;
+}
+
+.menu-dropdown div p:hover {
+  background-color: #80808021;
+}
+
+.content-main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.test-main{
+  flex:1;
+}
 @media (max-width: 768px) {
   .corsosel-new {
     max-width: 70% !important;

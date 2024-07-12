@@ -124,7 +124,6 @@ const SearchItems = () => {
     return (
         <>
             <Navbar />
-            <div>
                 <section id="testimonial">
                     {products.length > 0 ?
                     <div className="container">
@@ -311,7 +310,6 @@ const SearchItems = () => {
                     <div className="text-center" style={{fontSize: '30px'}}>No products</div>
                     }
                 </section>
-            </div>
             <Footer />
         </>
     )
